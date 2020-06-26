@@ -1,3 +1,4 @@
 #ignore data
 /python/data/
 /.idea/
+/python/config.py
