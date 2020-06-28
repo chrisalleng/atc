@@ -1,7 +1,8 @@
 CREATE OR REPLACE VIEW v_all_pilots as SELECT 
 	pilots.ref_pilot_id, 
 	players.player_id, 
-	players.points, 
+	players.faction,
+	players.points,
 	players.swiss_standing, 
 	players.cut_standing,
 	tournaments.tournament_id, 
