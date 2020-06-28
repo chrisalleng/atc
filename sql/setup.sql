@@ -38,3 +38,22 @@ JOIN players ON players.player_id = pilots.player_id
 JOIN matches_players ON matches_players.player_id = pilots.player_id
 JOIN matches ON matches.match_id = matches_players.match_id
 JOIN tournaments ON players.tournament_id = tournaments.tournament_id
+
+SELECT * FROM ref_pilot
+JOIN ref_ship ON ref_ship.ship_id = ref_pilot.ship_id
+JOIN ref_faction ON ref_pilot.faction_id = ref_faction.faction_id
+
+CREATE OR REPLACE VIEW v_ref_pilot AS
+SELECT
+	ref_pilot.ref_pilot_id AS ref_pilot_id,
+	ref_pilot.name AS pilot_name,
+	ref_pilot.xws AS pilot_xws,
+	ref_pilot.art_url AS art,
+	ref_pilot.card_url AS card,
+	ref_ship.ship_name AS ship_name,
+	ref_faction.name AS faction,
+	ref_faction.icon_url AS faction_art,
+	ref_faction.xws AS faction_xws
+FROM ref_pilot
+JOIN ref_ship ON ref_ship.ship_id = ref_pilot.ship_id
+JOIN ref_faction ON ref_pilot.faction_id = ref_faction.faction_id
