@@ -13,7 +13,7 @@ CREATE OR REPLACE VIEW v_all_pilots as SELECT
 	tournaments.fill_rate
 FROM pilots
 JOIN players on players.player_id = pilots.player_id
-JOIN tournaments on tournaments.tournament_id = players.tournament_id 
+JOIN tournaments on tournaments.tournament_id = players.tournament_id;
 
 CREATE OR REPLACE VIEW v_pilots_matches AS
 SELECT 
@@ -38,7 +38,7 @@ FROM pilots
 JOIN players ON players.player_id = pilots.player_id
 JOIN matches_players ON matches_players.player_id = pilots.player_id
 JOIN matches ON matches.match_id = matches_players.match_id
-JOIN tournaments ON players.tournament_id = tournaments.tournament_id
+JOIN tournaments ON players.tournament_id = tournaments.tournament_id;
 
 CREATE OR REPLACE VIEW v_ref_pilot AS
 SELECT
@@ -53,7 +53,7 @@ SELECT
 	ref_faction.xws AS faction_xws
 FROM ref_pilot
 JOIN ref_ship ON ref_ship.ship_id = ref_pilot.ship_id
-JOIN ref_faction ON ref_pilot.faction_id = ref_faction.faction_id
+JOIN ref_faction ON ref_pilot.faction_id = ref_faction.faction_id;
 
 CREATE OR REPLACE VIEW v_all_upgrades AS
 SELECT
@@ -71,7 +71,7 @@ SELECT
 FROM upgrades
 JOIN pilots ON pilots.pilot_id = upgrades.pilot_id
 JOIN players on players.player_id = pilots.player_id
-JOIN tournaments on tournaments.tournament_id = players.tournament_id
+JOIN tournaments on tournaments.tournament_id = players.tournament_id;
 
 CREATE OR REPLACE VIEW v_upgrades_matches AS
 SELECT
@@ -97,4 +97,4 @@ JOIN pilots ON upgrades.pilot_id = pilots.pilot_id
 JOIN players ON players.player_id = pilots.player_id
 JOIN matches_players ON matches_players.player_id = pilots.player_id
 JOIN matches ON matches.match_id = matches_players.match_id
-JOIN tournaments ON players.tournament_id = tournaments.tournament_id
+JOIN tournaments ON players.tournament_id = tournaments.tournament_id;

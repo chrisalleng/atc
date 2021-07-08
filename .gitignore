@@ -4,6 +4,6 @@
 /python/config.py
 merged_file.json
 data/
-python/site/node_modules/
+/site/node_modules/
 python/__pycache__/config.cpython-39.pyc
 python/config.pyc
