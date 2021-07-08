@@ -1,0 +1,153 @@
+<title>Advanced Targeting Computer</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+/>
+<link
+  href="https://unpkg.com/bootstrap-table@1.15.4/dist/bootstrap-table.min.css"
+  rel="stylesheet"
+/>
+<link href="./css/atc.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="./js/formatting.js"></script>
+
+<body class="bg-dark">
+  <nav
+    class="navbar navbar-expand navbar-secondary bg-secondary"
+    style="height: 78px;"
+  >
+    <a class="navbar-brand" href="./index.html"
+      ><img src="./images/atc.png" height="50" class="rounded"
+    /></a>
+    <div class="navbar-collapse">
+      <ul class="navbar-nav ">
+        <li class="nav-item active">
+          <a class="nav-link text-light" href="./index.html"
+            >Pilots <span class="sr-only">(current)</span></a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="./upgrades.html">Upgrades</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="./factions.html">Faction</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="./about.html">About</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class=" container w-50 text-light">
+    <h1>About</h1>
+    <h3>What is Advanced Targeting Computer?</h3>
+    <p>
+      Advanced Targeting Computer is a tournament data aggregation site for the
+      X-Wing Miniatures Game. Data is taken from
+      <a href="http://listfortress.com">Listfortress</a>, which is a
+      crowdsourced collection of tournaments, players, and lists. AT.C tracks
+      card performances by tournament as many other sites do, in addition to
+      collecting information on specific matchups between pilots.
+    </p>
+    <p>
+      AT.C is open source, with a public github repository available here: (Not
+      published yet).
+    </p>
+    <p>
+      Please report any issues you encounter or feature requests here: (Not
+      published yet).
+    </p>
+    <h3>What data is used? How is it filtered?</h3>
+    <p>
+      Currently, data is used from tournaments in Listfortress with at least 20
+      players, where 65% or more of players have lists entered that took place
+      after the release of Wave 4: 10 July 2019. The is to prevent small events
+      which tend to be uploaded consistently by the same geographic regions from
+      being overrepresented, and to prevent swiss rankings and cut rates from
+      being warped by events where only the lists that made the cut from
+      appearing.
+    </p>
+    <p>
+      Soon™, the date range will be modifiable so you can look into statistics
+      for any period of Second Edition.
+    </p>
+    <h3>Help! What do these columns mean?</h3>
+    <p>
+      <strong>Lists</strong> signifies how many unique lists a pilot has
+      appeared in. For unlimited/generic cards, this means that a list bringing
+      four copies of the same card counts that card only once. For cards that
+      are limited to one copy per list, this is a simple count of how many times
+      that card has been used.
+    </p>
+    <p>
+      <strong>Avg Bid</strong> is the average (mean) bid of every list that
+      includes the given card.
+    </p>
+    <p>
+      <strong>Avg Swiss Rank</strong> is the average (mean) final swiss result
+      of every list including at least one copy of the given card, normalized by
+      tournament size. The lower the percentage, the better the performance of
+      the card. For example, an Avg Swiss Rank of 45 means the given card's
+      average performance is 45th out of a 100 person event. Or, in a 200 person
+      event, the average result would be 90 - in a 10 person event, 4.5th. When
+      a player has 0 for their swiss rank, we treat that as last place in an
+      event.
+    </p>
+    <p>
+      <strong>Cut Rate</strong> signifies what percentage of all lists
+      containing the given card made the top cut at a given event.
+    </p>
+    <p>
+      <strong>Matches</strong> is the count of how many games with at least one
+      copy of the given card have been played.
+    </p>
+    <p>
+      <strong>Wins</strong> is the percentage of all matches including this card
+      that the list containing this card wins.
+    </p>
+    <p>
+      <strong>Bigger/Smaller Bid</strong> is the winrate for the selected pilot
+      against the pilot row, when the opposing pilot in the table has a smaller
+      or bigger bid. For example, when this was written Soontir Fel had a 52%
+      winrate against Anakin Skywalker (Aethersprite), but with a larger bid
+      Soontir wins 75% of the time, while with a smaller bid Soontir wins 37.5%
+      of the time.
+    </p>
+    <h1>Frequently Asked Questions</h1>
+    <p><strong>Why is the average winrate not 50%?!</strong></p>
+    <p>
+      In general, lists tend to be missing from the bottom positions of an
+      event. Because of this, the lists we do have matchup data for have an
+      above 50% winrate in aggregate.
+    </p>
+    <p>
+      <strong
+        >Why is nearly every pilots most commonly played opposing pilot a mirror
+        match?</strong
+      >
+    </p>
+    <p>
+      When a pilot plays itself, there are two instances of that pilot playing.
+      Since we have to include game A from player B and player C's perspective,
+      we actually have two games played: one from player B, and one from player
+      C. Because of this, they aren't actually playing game A - they're playing
+      two games.
+    </p>
+    <p>
+      <strong>Why don't you filter out cards with small sample sizes?</strong>
+    </p>
+    <p>
+      While this might change in the future, information that a card isn't used
+      very often is still valuable information, even if the aggregated
+      information isn't useful in a given sample size.
+    </p>
+  </div>
+</body>

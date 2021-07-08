@@ -1,0 +1,20 @@
+{
+  "name": "yawxms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "js/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "datatables.net": "^1.10.20",
+    "datatables.net-dt": "^1.10.20",
+    "express": "^4.17.1",
+    "express-sanitizer": "^1.0.5",
+    "mysql": "^2.17.1",
+    "serve-favicon": "^2.5.0"
+  }
+}

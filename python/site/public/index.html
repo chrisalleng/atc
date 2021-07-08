@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Advanced Targeting Computer</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      href="https://unpkg.com/bootstrap-table@1.15.4/dist/bootstrap-table.min.css"
+      rel="stylesheet"
+    />
+    <link href="./css/atc.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.4/dist/bootstrap-table.min.js"></script>
+    <script src="./js/formatting.js"></script>
+
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <link
+      href="https://nightly.datatables.net/css/jquery.dataTables.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
+    <link
+      href="https://nightly.datatables.net/fixedheader/css/fixedHeader.dataTables.css?_=f0de745b101295e88f1504c17177ff49.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://nightly.datatables.net/fixedheader/js/dataTables.fixedHeader.js?_=f0de745b101295e88f1504c17177ff49"></script>
+
+    <script>
+      $(document).ready(function() {
+        $("#pilots_table").DataTable({
+          fixedHeader: {
+            header: true
+          },
+          order: [[5, "desc"]],
+          info: false,
+          paging: false,
+          autoWidth: false,
+          ajax: "http://advancedtargeting.computer:3000/all_pilots",
+          columns: [
+            {
+              data: "name",
+              render: function(data, type, row) {
+                return NameLinkFormatter(data, row, row);
+              }
+            },
+            {
+              data: "faction_name",
+              className: "hiddenColumn"
+            },
+            {
+              data: "art",
+              render: function(data, type, row) {
+                return ImageMouseOverFormatter(data, row);
+              }
+            },
+            {
+              data: "faction",
+              render: function(data, type, row) {
+                return "<img src=" + data + " height=30 margin=0 padding=0 />";
+              }
+            },
+            { data: "ship" },
+            { data: "list_count" },
+            {
+              data: "avg_bid",
+              render: $.fn.dataTable.render.number(",", ".", 2, "")
+            },
+            {
+              data: "avg_percentile",
+              render: function(data, type, row) {
+                return SwissRankFormatter(data);
+              }
+            },
+            {
+              data: "cut_rate",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            },
+            { data: "game_count" },
+            {
+              data: "win_rate",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            },
+            { data: "games_cut" },
+            {
+              data: "cut_winrate",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            }
+          ]
+        });
+      });
+    </script>
+  </head>
+
+  <body class="bg-dark">
+    <nav
+      class="navbar navbar-expand navbar-secondary bg-secondary"
+      style="height: 78px;"
+    >
+      <a class="navbar-brand" href="./index.html"
+        ><img src="./images/atc.png" height="50" class="rounded"
+      /></a>
+      <div class="navbar-collapse">
+        <ul class="navbar-nav ">
+          <li class="nav-item active">
+            <a class="nav-link text-light" href="./index.html"
+              >Pilots <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./upgrades.html">Upgrades</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./factions.html">Faction</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./about.html">About</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container w-75">
+      <div style="padding: 5px;"></div>
+      <table class="hover table table-dark text-center" id="pilots_table">
+        <thead>
+          <tr>
+            <th>Pilot</th>
+            <th>Faction Name</th>
+            <th>Card</th>
+            <th>Faction</th>
+            <th>Ship</th>
+            <th>Lists</th>
+            <th>Avg Bid</th>
+            <th>Avg Swiss Rank</th>
+            <th>Cut Rate</th>
+            <th>Matches</th>
+            <th>Wins</th>
+            <th>Cut Matches</th>
+            <th>Cut Winrate</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </body>
+</html>

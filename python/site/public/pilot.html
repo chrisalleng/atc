@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Placeholder</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      href="https://unpkg.com/bootstrap-table@1.15.4/dist/bootstrap-table.min.css"
+      rel="stylesheet"
+    />
+    <link href="./css/atc.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.4/dist/bootstrap-table.min.js"></script>
+    <script src="./js/formatting.js"></script>
+    <link
+      href="https://nightly.datatables.net/css/jquery.dataTables.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
+    <link
+      href="https://nightly.datatables.net/fixedheader/css/fixedHeader.dataTables.css?_=f0de745b101295e88f1504c17177ff49.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://nightly.datatables.net/fixedheader/js/dataTables.fixedHeader.js?_=f0de745b101295e88f1504c17177ff49"></script>
+    <script>
+      var xws = getUrlParam("pilot", "ERROR");
+      var card_url = "";
+      var card_name = "";
+      var matchups_url = "http://advancedtargeting.computer:3000/pilot/" + xws;
+      var upgrades_url =
+        "http://advancedtargeting.computer:3000/upgrades_pilot/" + xws;
+      var overview_url =
+        "http://advancedtargeting.computer:3000/pilot_overview/" + xws;
+      var url = "http://advancedtargeting.computer:3000/pilot_details/" + xws;
+      var test = loadJSON(url, function(response) {
+        card_url = JSON.parse(response).pilot_card;
+        card_name = JSON.parse(response).pilot_name;
+      });
+    </script>
+    <script>
+      document.title = card_name + " - Advanced Targeting Computer";
+      $(document).ready(function() {
+        $("#matchups_table").DataTable({
+          fixedHeader: {
+            header: true
+          },
+          order: [[4, "desc"]],
+          info: false,
+          paging: false,
+          autoWidth: false,
+          ajax: matchups_url,
+          columns: [
+            {
+              data: "name",
+              render: function(data, type, row) {
+                return MatchupLinkFormatter(data, row, row);
+              }
+            },
+            {
+              data: "pilot2_art",
+              render: function(data, type, row) {
+                return ImageMouseOverFormatterMatchups(data, row);
+              }
+            },
+            {
+              data: "pilot2_faction_icon",
+              render: function(data, type, row) {
+                return "<img src=" + data + " height=30 margin=0 padding=0 />";
+              }
+            },
+            { data: "pilot2_ship_name" },
+            { data: "games" },
+            {
+              data: "winrate",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            },
+            {
+              data: "winrate_bigger_bid",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            },
+            {
+              data: "winrate_smaller_bid",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            },
+            { data: "games_cut" },
+            {
+              data: "winrate_cut",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            },
+            {
+              data: "pilot2_faction_name",
+              className: "hiddenColumn"
+            }
+          ]
+        });
+
+        $("#upgrades_table").DataTable({
+          fixedHeader: {
+            header: true
+          },
+          order: [[3, "desc"]],
+          info: false,
+          paging: false,
+          autoWidth: false,
+          ajax: upgrades_url,
+          columns: [
+            {
+              data: "upgrade_name",
+              render: function(data, type, row) {
+                return PilotNameLinkFormatter(data, row, row);
+              }
+            },
+            {
+              data: "upgrade_art",
+              render: function(data, type, row) {
+                return ImageMouseOverFormatterPilotUpgrades(data, row);
+              }
+            },
+            { data: "upgrade_type" },
+            { data: "lists" },
+            {
+              data: "avg_percentile",
+              render: function(data, type, row) {
+                return SwissRankFormatter(data);
+              }
+            },
+            {
+              data: "cut_rate",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            },
+            { data: "games" },
+            {
+              data: "winrate",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            },
+            {
+              data: "winrate_bigger_bid",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            },
+            {
+              data: "winrate_smaller_bid",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            },
+            { data: "games_cut" },
+            {
+              data: "winrate_cut",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            }
+          ]
+        });
+      });
+    </script>
+  </head>
+
+  <body class="bg-dark">
+    <nav
+      class="navbar navbar-expand navbar-secondary bg-secondary"
+      style="height: 78px;"
+    >
+      <a class="navbar-brand" href="./index.html"
+        ><img src="./images/atc.png" height="50" class="rounded"
+      /></a>
+      <div class="navbar-collapse">
+        <ul class="navbar-nav ">
+          <li class="nav-item active">
+            <a class="nav-link text-light" href="./index.html"
+              >Pilots <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./upgrades.html">Upgrades</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./factions.html">Faction</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./about.html">About</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container-fluid w-75">
+      <div style="padding: 5px"></div>
+      <div class="row">
+        <div class="col-xl-4 float-right text-center">
+          <div id="pilot_card"></div>
+          <script type="text/javascript">
+            document.getElementById("pilot_card").innerHTML =
+              '<img src="' + card_url + '" id="imageBox" height="400px"/>';
+          </script>
+        </div>
+        <div class="col-xl-8  text-center">
+          <ul class="nav nav-pills mb-3" id="summary-tab" role="tablist">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                id="matchup-summary-tab"
+                data-toggle="pill"
+                href="#matchup-summary"
+                role="tab"
+                aria-controls="matchup-summary"
+                aria-selected="true"
+                >Matchup Summary</a
+              >
+            </li>
+          </ul>
+          <div class="tab-content" id="summary-tabContent">
+            <div
+              class="tab-pane fade show active"
+              id="matchup-summary"
+              role="tabpanel"
+              aria-labelledby="matchup-summary-tab"
+              style="align-self: center; padding: 20px 0px;"
+            >
+              <table
+                class="table table-dark text-center table-sm"
+                data-toggle="table"
+                data-sortable="true"
+                id="overview_table"
+              >
+                <script>
+                  document
+                    .getElementById("overview_table")
+                    .setAttribute("data-url", overview_url);
+                </script>
+                <thead>
+                  <tr>
+                    <th data-field="pilot2_initiative" data-sortable="true">
+                      Opposing Initiative
+                    </th>
+                    <th data-field="games" data-sortable="true">Games</th>
+                    <th
+                      data-field="winrate"
+                      data-formatter="PercentageFormatter"
+                      data-sortable="true"
+                    >
+                      Win
+                    </th>
+                    <th
+                      data-field="winrate_bigger_bid"
+                      data-formatter="PercentageFormatter"
+                      data-sortable="true"
+                    >
+                      Bigger Bid
+                    </th>
+                    <th
+                      data-field="winrate_smaller_bid"
+                      data-formatter="PercentageFormatter"
+                      data-sortable="true"
+                    >
+                      Smaller Bid
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="summary-placeholder1"
+              role="tabpanel"
+              aria-labelledby="summary-placeholder1-tab"
+            ></div>
+            <div
+              class="tab-pane fade"
+              id="summary-placeholder2"
+              role="tabpanel"
+              aria-labelledby="summary-placeholder2-tab"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding: 5px"></div>
+      <ul class="nav nav-pills mb-3" id="bottom-tab" role="tablist">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            id="bottom-matchups-tab"
+            data-toggle="pill"
+            href="#bottom-matchups"
+            role="tab"
+            aria-controls="bottom-matchups"
+            aria-selected="true"
+            >Pilot Matchups</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            id="bottom-upgrades-tab"
+            data-toggle="pill"
+            href="#bottom-upgrades"
+            role="tab"
+            aria-controls="bottom-upgrades"
+            aria-selected="false"
+            >Upgrades</a
+          >
+        </li>
+      </ul>
+      <div class="tab-content" id="summary-tabContent">
+        <div
+          class="tab-pane fade show active"
+          id="bottom-matchups"
+          role="tabpanel"
+          aria-labelledby="bottom-matchups-tab"
+        >
+          <table
+            class="table table-dark table-fixed text-center table-sm"
+            id="matchups_table"
+          >
+            <thead>
+              <tr>
+                <th>Opposing Pilot</th>
+                <th>Card</th>
+                <th>Faction</th>
+                <th>Ship</th>
+                <th>Games</th>
+                <th>Wins</th>
+                <th>Bigger Bid</th>
+                <th>Smaller Bid</th>
+                <th>Cut Games</th>
+                <th>Cut Wins</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="bottom-upgrades"
+          role="tabpanel"
+          aria-labelledby="bottom-upgrades-tab"
+        >
+          <table
+            class="table table-dark table-fixed text-center table-sm"
+            id="upgrades_table"
+          >
+            <thead>
+              <tr>
+                <th>Upgrade</th>
+                <th>Card</th>
+                <th>Type</th>
+                <th>Lists</th>
+                <th>Avg Swiss Rank</th>
+                <th>Cut Rate</th>
+                <th>Games</th>
+                <th>Win</th>
+                <th>Bigger Bid</th>
+                <th>Smaller Bid</th>
+                <th>Cut Games</th>
+                <th>Cut Wins</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

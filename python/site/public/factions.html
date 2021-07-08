@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Upgrades - Advanced Targeting Computer</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      href="https://unpkg.com/bootstrap-table@1.15.4/dist/bootstrap-table.min.css"
+      rel="stylesheet"
+    />
+    <link href="./css/atc.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.4/dist/bootstrap-table.min.js"></script>
+    <script src="./js/formatting.js"></script>
+    <script></script>
+  </head>
+
+  <body class="bg-dark">
+    <nav
+      class="navbar navbar-expand navbar-secondary bg-secondary"
+      style="height: 78px;"
+    >
+      <a class="navbar-brand" href="./index.html"
+        ><img src="./images/atc.png" height="50" class="rounded"
+      /></a>
+      <div class="navbar-collapse">
+        <ul class="navbar-nav ">
+          <li class="nav-item active">
+            <a class="nav-link text-light" href="./index.html"
+              >Pilots <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./upgrades.html">Upgrades</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./factions.html">Faction</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./about.html">About</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container-fluid w-75 main-table">
+      <table
+        class="responsive-table table fixed-table table-dark text-center table-hover "
+        data-toggle="table"
+        data-sortable="true"
+        data-height="92vh"
+        data-url="http://advancedtargeting.computer:3000/all_factions"
+      >
+        <thead>
+          <tr>
+            <th data-field="name" data-sortable="true">
+              Faction
+            </th>
+            <th
+              data-field="art"
+              data-formatter="<img src=%s height=50 margin=0 padding=0 />"
+              margin="0"
+              padding="0"
+            >
+              Image
+            </th>
+            <th
+              data-field="avg_bid"
+              data-formatter="DecimalFormatter"
+              data-sortable="true"
+            >
+              <div>
+                Avg Bid
+              </div>
+            </th>
+            <th data-field="list_count" data-sortable="true">Lists</th>
+            <th
+              data-field="avg_percentile"
+              data-formatter="SwissRankFormatter"
+              data-sortable="true"
+            >
+              Avg Swiss Rank
+            </th>
+            <th
+              data-field="cut_rate"
+              data-formatter="PercentageFormatter"
+              data-sortable="true"
+            >
+              Cut Rate
+            </th>
+            <th data-field="game_count" data-sortable="true">Matches</th>
+            <th
+              data-field="win_rate"
+              data-formatter="PercentageFormatter"
+              data-sortable="true"
+            >
+              Wins
+            </th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </body>
+</html>

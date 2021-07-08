@@ -1,0 +1,40 @@
+.w-75 {
+  max-width: 75% !important;
+}
+
+.even,
+.odd,
+.sorting_1 {
+  background-color: #343a40 !important;
+}
+
+.tr,
+.sorting,
+.sorting_asc,
+.sorting_desc {
+  background-color: #343a40 !important;
+}
+
+table.dataTable tbody td {
+  vertical-align: middle;
+}
+
+.dataTables_filter {
+  color: #ffffff !important;
+}
+
+.hiddenColumn {
+  display: none;
+}
+
+#tooltip1 {
+  position: relative;
+}
+#tooltip1 a span {
+  display: none;
+}
+#tooltip1 a:hover span {
+  display: block;
+  position: absolute;
+  z-index: 1000;
+}
