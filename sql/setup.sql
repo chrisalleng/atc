@@ -32,7 +32,7 @@ SELECT
 	tournaments.players AS players,
 	tournaments.cut_size AS cut_size,
 	tournaments.fill_rate AS fill_rate,
-	tournaments.format AS FORMAT,
+	tournaments.format AS format,
 	tournaments.date AS date
 FROM pilots
 JOIN players ON players.player_id = pilots.player_id
@@ -45,10 +45,10 @@ SELECT
 	ref_pilot.ref_pilot_id AS ref_pilot_id,
 	ref_pilot.name AS pilot_name,
 	ref_pilot.xws AS pilot_xws,
-	ref_pilot.art_url AS art,
-	ref_pilot.card_url AS card,
+	ref_pilot.art_url AS art_url,
+	ref_pilot.card_url AS card_url,
 	ref_ship.ship_name AS ship_name,
-	ref_faction.name AS faction,
+	ref_faction.name AS faction_name,
 	ref_faction.icon_url AS faction_art,
 	ref_faction.xws AS faction_xws
 FROM ref_pilot

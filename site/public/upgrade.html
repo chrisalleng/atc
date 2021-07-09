@@ -36,12 +36,12 @@
       var card_name = "";
       var card_type = "";
       var upgrades_type_url =
-        "http://advancedtargeting.computer:3000/upgrades/";
+        "http://localhost:3000/upgrades/";
       var upgrades_url =
-        "http://advancedtargeting.computer:3000/pilot_upgrades/" + xws;
-      var url = "http://advancedtargeting.computer:3000/upgrade_details/" + xws;
+        "http://localhost:3000/pilot_upgrades/" + xws;
+      var url = "http://localhost:3000/upgrade_details/" + xws;
       var type_url =
-        "http://advancedtargeting.computer:3000/upgrade_slot/" + xws;
+        "http://localhost:3000/upgrade_slot/" + xws;
       var test = loadJSON(url, function(response) {
         card_url = JSON.parse(response).upgrade_card;
         card_name = JSON.parse(response).upgrade_name;

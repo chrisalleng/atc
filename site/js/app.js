@@ -1,5 +1,5 @@
 const express = require("express");
-const mysql = require("mysql");
+const mysql = require("mysql2");
 var cors = require("cors");
 var favicon = require("serve-favicon");
 const expressSanitizer = require("express-sanitizer");
@@ -11,7 +11,7 @@ app.use(cors());
 app.use(favicon(__dirname + "./../public/favicon.ico"));
 app.use(expressSanitizer());
 
-all_pilots_sql = "CALL GetAllPilots('2020-01-20','2100-01-01')";
+all_pilots_sql = "CALL GetAllPilots('2021-01-01','2100-01-01', 34)";
 all_upgrades_sql = "CALL GetAllUpgrades('2020-01-20','2100-01-01')";
 all_factions_sql = "CALL GetAllFactions('2020-01-20','2100-01-01')";
 pilot_matchups_sql = "CALL GetPilotMatchups(?, ?, ?)";
@@ -27,10 +27,10 @@ slot_by_upgrade_sql =
   "SELECT name FROM v_get_upgrade_slot WHERE v_get_upgrade_slot.xws = ?";
 
 var pool = mysql.createPool({
-  host: "advancedtargeting.computer",
-  user: "brunas",
-  password: "V1T1f!bm0d&p",
-  database: "yaxwms"
+  host: "localhost",
+  user: "listfortress_ripper",
+  password: "password",
+  database: "atc"
 });
 
 function logRequest(req) {

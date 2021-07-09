@@ -2,6 +2,20 @@ function PercentageFormatter(value, row, index) {
   return (value * 100).toFixed(2) + "%";
 }
 
+function WinrateFormatter(value, row, index) {
+  if (row.game_count == 0) {
+    return "0%"
+  }
+  return (row.win_count / row.game_count* 100).toFixed(2) + "%";
+}
+
+function CutWinrateFormatter(value, row, index) {
+  if (row.cut_games == 0) {
+    return "0%"
+  }
+  return (row.cut_wins / row.cut_games* 100).toFixed(2) + "%";
+}
+
 function SwissRankFormatter(value, row, index) {
   return (value * 100).toFixed(2);
 }
@@ -14,9 +28,9 @@ function NameLinkFormatter(value, row, index) {
   return (
     "<a class='text-white' href='" +
     "./pilot.html?pilot=" +
-    row.xws +
+    row.pilot_xws +
     "'>" +
-    row.name +
+    row.pilot_name +
     "</a>"
   );
 }

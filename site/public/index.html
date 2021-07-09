@@ -44,10 +44,10 @@
           info: false,
           paging: false,
           autoWidth: false,
-          ajax: "http://advancedtargeting.computer:3000/all_pilots",
+          ajax: "http://localhost:3000/all_pilots",
           columns: [
             {
-              data: "name",
+              data: "pilot_name",
               render: function(data, type, row) {
                 return NameLinkFormatter(data, row, row);
               }
@@ -57,18 +57,18 @@
               className: "hiddenColumn"
             },
             {
-              data: "art",
+              data: "art_url",
               render: function(data, type, row) {
                 return ImageMouseOverFormatter(data, row);
               }
             },
             {
-              data: "faction",
+              data: "faction_art",
               render: function(data, type, row) {
                 return "<img src=" + data + " height=30 margin=0 padding=0 />";
               }
             },
-            { data: "ship" },
+            { data: "ship_name" },
             { data: "list_count" },
             {
               data: "avg_bid",
@@ -90,14 +90,14 @@
             {
               data: "win_rate",
               render: function(data, type, row) {
-                return PercentageFormatter(data);
+                return WinrateFormatter(data, row);
               }
             },
-            { data: "games_cut" },
+            { data: "cut_games" },
             {
               data: "cut_winrate",
               render: function(data, type, row) {
-                return PercentageFormatter(data);
+                return CutWinrateFormatter(data, row);
               }
             }
           ]
@@ -145,7 +145,7 @@
             <th>Ship</th>
             <th>Lists</th>
             <th>Avg Bid</th>
-            <th>Avg Swiss Rank</th>
+            <th>Percentile</th>
             <th>Cut Rate</th>
             <th>Matches</th>
             <th>Wins</th>

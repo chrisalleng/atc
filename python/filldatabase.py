@@ -48,8 +48,101 @@ def clean_upgrade_xws(upgrade_xws):
 
 
 def clear_tables(input_cursor):
-    clean_sql = open("sql/clean.sql").read()
-    input_cursor.execute(clean_sql, multi=True)
+    input_cursor.execute("DROP TABLE IF EXISTS matches_players")
+    input_cursor.execute("DROP TABLE IF EXISTS matches")
+    input_cursor.execute("DROP TABLE IF EXISTS upgrades")
+    input_cursor.execute("DROP TABLE IF EXISTS pilots")
+    input_cursor.execute("DROP TABLE IF EXISTS players")
+    input_cursor.execute("DROP TABLE IF EXISTS tournaments")
+    input_cursor.execute("DROP TABLE IF EXISTS ref_pilot")
+    input_cursor.execute("DROP TABLE IF EXISTS ref_ship")
+    input_cursor.execute("DROP TABLE IF EXISTS ref_upgrade")
+    input_cursor.execute("DROP TABLE IF EXISTS ref_upgrade_type")
+    input_cursor.execute("DROP TABLE IF EXISTS ref_faction")
+
+    input_cursor.execute("CREATE TABLE ref_ship ("
+                         "ship_id INT AUTO_INCREMENT PRIMARY KEY,"
+                         "ship_name VARCHAR(255))")
+
+    input_cursor.execute("CREATE TABLE ref_faction ("
+                         "faction_id INT AUTO_INCREMENT PRIMARY KEY,"
+                         "name VARCHAR(255), "
+                         "icon_url VARCHAR(255), "
+                         "xws VARCHAR(255))")
+
+    input_cursor.execute("CREATE TABLE ref_upgrade_type ("
+                         "upgrade_type_id INT AUTO_INCREMENT PRIMARY KEY,"
+                         "name VARCHAR(255))")
+
+    input_cursor.execute("CREATE TABLE ref_pilot ("
+                         "ref_pilot_id INT AUTO_INCREMENT PRIMARY KEY,"
+                         "ship_id INT,"
+                         "faction_id INT,"
+                         "name VARCHAR(255), "
+                         "cost INT,"
+                         "initiative INT,"
+                         "xws VARCHAR(255),"
+                         "art_url VARCHAR(255),"
+                         "card_url VARCHAR(255),"
+                         "FOREIGN KEY(faction_id) REFERENCES ref_faction(faction_id),"
+                         "FOREIGN KEY(ship_id) REFERENCES ref_ship(ship_id))")
+
+    input_cursor.execute("CREATE TABLE ref_upgrade ("
+                         "ref_upgrade_id INT AUTO_INCREMENT PRIMARY KEY,"
+                         "upgrade_type_id INT,"
+                         "name VARCHAR(255), "
+                         "art_url VARCHAR(255), "
+                         "card_url VARCHAR(255), "
+                         "cost INT,"
+                         "xws VARCHAR(255),"
+                         "FOREIGN KEY(upgrade_type_id) REFERENCES ref_upgrade_type(upgrade_type_id))")
+
+    input_cursor.execute("CREATE TABLE tournaments ("
+                         "tournament_id INT AUTO_INCREMENT PRIMARY KEY,"
+                         "players INT, "
+                         "date DATE,"
+                         "cut_size INT,"
+                         "fill_rate DOUBLE," 
+                         "format INT)")
+
+    input_cursor.execute("CREATE TABLE players ("
+                         "player_id INT AUTO_INCREMENT PRIMARY KEY, "
+                         "tournament_id INT,"
+                         "faction INT, "
+                         "points INT, "
+                         "swiss_standing INT, "
+                         "cut_standing INT,"
+                         "FOREIGN KEY(tournament_id) REFERENCES tournaments(tournament_id),"
+                         "FOREIGN KEY(faction) REFERENCES ref_faction(faction_id))")
+
+    input_cursor.execute("CREATE TABLE pilots ("
+                         "pilot_id INT AUTO_INCREMENT PRIMARY KEY, "
+                         "player_id INT,"
+                         "points INT,"
+                         "ref_pilot_id INT,"
+                         "FOREIGN KEY(player_id) REFERENCES players(player_id),"
+                         "FOREIGN KEY(ref_pilot_id) REFERENCES ref_pilot(ref_pilot_id))")
+
+    input_cursor.execute("CREATE TABLE upgrades ("
+                         "upgrade_id INT AUTO_INCREMENT PRIMARY KEY, "
+                         "pilot_id INT,"
+                         "ref_upgrade_id INT,"
+                         "FOREIGN KEY(pilot_id) REFERENCES pilots(pilot_id),"
+                         "FOREIGN KEY(ref_upgrade_id) REFERENCES ref_upgrade(ref_upgrade_id))")
+
+    input_cursor.execute("CREATE TABLE matches ("
+                         "match_id INT AUTO_INCREMENT PRIMARY KEY,"
+                         "winner_id INT,"
+                         "type INT,"
+                         "FOREIGN KEY(winner_id) REFERENCES players(player_id))")
+
+    input_cursor.execute("CREATE TABLE matches_players ("
+                         "entry_id INT AUTO_INCREMENT PRIMARY KEY,"
+                         "match_id INT,"
+                         "player_id INT,"
+                         "player_points INT,"
+                         "FOREIGN KEY(player_id) REFERENCES players(player_id),"
+                         "FOREIGN KEY(match_id) REFERENCES matches(match_id))")
 
 def get_ref_data():
     pilots_url = 'http://xhud.sirjorj.com/xwing.cgi/pilots2?format=json'
@@ -74,9 +167,9 @@ def get_ref_data():
         (3, "Scum and Villainy", "scumandvillainy", "https://squadbuilder.fantasyflightgames.com/factions/Scum.png"),
         (4, "Resistance", "resistance", "https://squadbuilder.fantasyflightgames.com/factions/ResistanceIcon.png"),
         (5, "First Order", "firstorder", "https://squadbuilder.fantasyflightgames.com/factions/FirstOrderIcon.png"),
-        (6, "Galactic Republic", "galacticrepublic", "https://squadbuilder.fantasyflightgames.com/factions/factions/RepublicIcon.png"),
+        (6, "Galactic Republic", "galacticrepublic", "https://squadbuilder.fantasyflightgames.com/factions/RepublicIcon.png"),
         (7, "Separatist Alliance", "separatistalliance",
-         "https://squadbuilder.fantasyflightgames.com/factions//SeparatistIcon.png"),
+         "https://squadbuilder.fantasyflightgames.com/factions/SeparatistIcon.png"),
         (8, "Unknown", "unknown", "unknown")]
 
     for parsed_pilot in parsed_pilots:
@@ -316,6 +409,7 @@ database = mysql.connector.connect(
 )
 cursor = database.cursor()
 clear_tables(cursor)
+database.commit()
 ref_ships, ref_pilots, ref_upgrades, ref_factions = get_ref_data()
 update_tables(ref_pilots, ref_upgrades, ref_factions, 'merged_file.json')
 database.commit()
