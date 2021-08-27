@@ -39,9 +39,9 @@ function UpgradesNameLinkFormatter(value, row, index) {
   return (
     "<a class='text-white' href='" +
     "./upgrade.html?upgrade=" +
-    row.xws +
+    row.upgrade_xws +
     "'>" +
-    row.name +
+    row.upgrade_name +
     "</a>"
   );
 }

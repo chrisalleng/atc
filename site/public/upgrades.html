@@ -43,13 +43,13 @@
           ajax: "http://localhost:3000/all_upgrades",
           columns: [
             {
-              data: "name",
+              data: "upgrade_name",
               render: function(data, type, row) {
                 return UpgradesNameLinkFormatter(data, row, row);
               }
             },
             {
-              data: "art",
+              data: "art_url",
               render: function(data, type, row) {
                 return ImageMouseOverFormatter(data, row);
               }
@@ -76,12 +76,12 @@
             {
               data: "win_rate",
               render: function(data, type, row) {
-                return PercentageFormatter(data);
+                return WinrateFormatter(data, row);
               }
             },
-            { data: "cut_count" },
+            { data: "cut_games" },
             {
-              data: "cut_winrate",
+              data: "cut_rate",
               render: function(data, type, row) {
                 return PercentageFormatter(data);
               }

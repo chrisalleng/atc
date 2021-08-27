@@ -12,12 +12,12 @@ app.use(favicon(__dirname + "./../public/favicon.ico"));
 app.use(expressSanitizer());
 
 all_pilots_sql = "CALL GetAllPilots('2021-01-01','2100-01-01', 34)";
-all_upgrades_sql = "CALL GetAllUpgrades('2020-01-20','2100-01-01')";
+all_upgrades_sql = "CALL GetAllUpgrades('2020-01-20','2100-01-01', 34)";
 all_factions_sql = "CALL GetAllFactions('2020-01-20','2100-01-01')";
 pilot_matchups_sql = "CALL GetPilotMatchups(?, ?, ?)";
 pilot_stats_sql = "CALL GetPilotStats(?, ?, ?)";
 pilot_details_sql =
-  "SELECT v_ref_pilot.name AS pilot_name,	v_ref_pilot.card AS pilot_card FROM v_ref_pilot WHERE v_ref_pilot.xws = ?";
+  "SELECT v_ref_pilot.pilot_name AS pilot_name,	v_ref_pilot.card_url AS pilot_card FROM v_ref_pilot WHERE v_ref_pilot.pilot_xws = ?";
 upgrade_details_sql =
   "SELECT ref_upgrade.name AS upgrade_name,	ref_upgrade.card_url AS upgrade_card FROM ref_upgrade WHERE ref_upgrade.xws = ?";
 upgrades_by_pilot_sql = "CALL GetUpgradeStatsByPilot(?, ?, ?)";
