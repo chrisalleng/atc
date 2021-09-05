@@ -18,7 +18,77 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.15.4/dist/bootstrap-table.min.js"></script>
     <script src="./js/formatting.js"></script>
-    <script></script>
+    <link
+      href="https://nightly.datatables.net/css/jquery.dataTables.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
+    <link
+      href="https://nightly.datatables.net/fixedheader/css/fixedHeader.dataTables.css?_=f0de745b101295e88f1504c17177ff49.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://nightly.datatables.net/fixedheader/js/dataTables.fixedHeader.js?_=f0de745b101295e88f1504c17177ff49"></script>
+    <script>
+      $(document).ready(function() {
+        $("#factions_table").DataTable({
+          fixedHeader: {
+            header: true
+          },
+          order: [[2, "desc"]],
+          info: false,
+          paging: false,
+          autoWidth: false,
+          ajax: "http://localhost:3000/all_factions",
+          columns: [
+            {
+              data: "name"
+            },
+            {
+              data: "art_url",
+              render: function(data, type, row) {
+                return ImageMouseOverFormatter(data, row);
+              }
+            },
+            {
+              data: "lists"},
+            {
+              data: "avg_bid",
+              render: $.fn.dataTable.render.number(",", ".", 2, "")
+            },
+            {
+              data: "avg_percentile",
+              render: function(data, type, row) {
+                return SwissRankFormatter(data);
+              }
+            },
+            {
+              data: "cut_rate",
+              render: function(data, type, row) {
+                return PercentageFormatter(data);
+              }
+            },
+            { 
+              data: "game_count" },
+            {
+              data: "win_rate",
+              render: function(data, type, row) {
+                return WinrateFormatter(data, row);
+              }
+            },
+            { 
+              data: "cut_games" },
+            {
+              data: "cut_winrate",
+              render: function(data, type, row) {
+                return CutWinrateFormatter(data, row);
+              }
+            }
+          ]
+        });
+      });
+    </script>
   </head>
 
   <body class="bg-dark">
@@ -48,59 +118,21 @@
         </ul>
       </div>
     </nav>
-    <div class="container-fluid w-75 main-table">
-      <table
-        class="responsive-table table fixed-table table-dark text-center table-hover "
-        data-toggle="table"
-        data-sortable="true"
-        data-height="92vh"
-        data-url="http://localhost:3000/all_factions"
-      >
+    <div class="container w-75">
+      <div style="padding: 5px;"></div>
+      <table class="hover table table-dark text-center" id="factions_table">
         <thead>
           <tr>
-            <th data-field="name" data-sortable="true">
-              Faction
-            </th>
-            <th
-              data-field="art"
-              data-formatter="<img src=%s height=50 margin=0 padding=0 />"
-              margin="0"
-              padding="0"
-            >
-              Image
-            </th>
-            <th
-              data-field="avg_bid"
-              data-formatter="DecimalFormatter"
-              data-sortable="true"
-            >
-              <div>
-                Avg Bid
-              </div>
-            </th>
-            <th data-field="list_count" data-sortable="true">Lists</th>
-            <th
-              data-field="avg_percentile"
-              data-formatter="SwissRankFormatter"
-              data-sortable="true"
-            >
-              Avg Swiss Rank
-            </th>
-            <th
-              data-field="cut_rate"
-              data-formatter="PercentageFormatter"
-              data-sortable="true"
-            >
-              Cut Rate
-            </th>
-            <th data-field="game_count" data-sortable="true">Matches</th>
-            <th
-              data-field="win_rate"
-              data-formatter="PercentageFormatter"
-              data-sortable="true"
-            >
-              Wins
-            </th>
+            <th>Faction</th>
+            <th>Image</th>
+            <th>Lists</th>
+            <th>Avg Bid</th>
+            <th>Avg Percentile</th>
+            <th>Cut Rate</th>
+            <th>Games</th>
+            <th>Winrate</th>
+            <th>Cut Games</th>
+            <th>Cut Winrate</th>
           </tr>
         </thead>
       </table>

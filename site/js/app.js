@@ -12,8 +12,8 @@ app.use(favicon(__dirname + "./../public/favicon.ico"));
 app.use(expressSanitizer());
 
 all_pilots_sql = "CALL GetAllPilots('2021-01-01','2100-01-01', 34)";
-all_upgrades_sql = "CALL GetAllUpgrades('2020-01-20','2100-01-01', 34)";
-all_factions_sql = "CALL GetAllFactions('2020-01-20','2100-01-01')";
+all_upgrades_sql = "CALL GetAllUpgrades('2021-01-20','2100-01-01', 34)";
+all_factions_sql = "CALL GetAllFactions('2020-01-20','2100-01-01', 34)";
 pilot_matchups_sql = "CALL GetPilotMatchups(?, ?, ?)";
 pilot_stats_sql = "CALL GetPilotStats(?, ?, ?)";
 pilot_details_sql =
@@ -96,7 +96,9 @@ app.get("/all_factions", (req, res) => {
     connection.query(all_factions_sql, function(err, result, fields) {
       connection.release();
       if (err) throw err;
-      res.send(result[0]);
+      var faction_json = {};
+      faction_json.data = result[0];
+      res.send(faction_json);
     });
   });
 });
