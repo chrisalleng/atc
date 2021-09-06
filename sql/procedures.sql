@@ -159,3 +159,113 @@ JOIN (
 ON main_stats.faction = game_stats.faction
 JOIN ref_faction ON ref_faction.faction_id = main_stats.faction
 WHERE main_stats.faction != 8
+
+DROP PROCEDURE IF EXISTS atc.GetUpgradeStatsByPilot;
+CREATE PROCEDURE `GetUpgradeStatsByPilot`(
+	IN `input_xws` VARCHAR(255),
+	IN `start_date` DATE,
+	IN `end_date` DATE,
+	IN `input_format` INT)
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
+SELECT 
+	ref_upgrade.name AS upgrade_name,
+	ref_upgrade.xws AS upgrade_xws,
+	ref_upgrade_type.name AS upgrade_type,
+	ref_upgrade.art_url AS upgrade_art,
+	ref_upgrade.card_url AS upgrade_card,
+	list_stats.lists,
+	1 - list_stats.avg_percentile AS avg_percentile,
+	list_stats.cut_rate,
+	matchup_stats.games,
+	matchup_stats.wins,
+	matchup_stats.winrate,
+	matchup_stats.games_bigger_bid,
+	matchup_stats.win_bigger_bid,
+	matchup_stats.winrate_bigger_bid,
+	matchup_stats.games_smaller_bid,
+	matchup_stats.win_smaller_bid,
+	matchup_stats.winrate_smaller_bid,
+	matchup_stats.games_cut,
+	matchup_stats.wins_cut,
+	matchup_stats.winrate_cut
+FROM ref_upgrade
+LEFT JOIN ref_upgrade_type ON ref_upgrade.upgrade_type_id = ref_upgrade_type.upgrade_type_id
+LEFT JOIN (
+	SELECT 
+		base.xws AS upgrade_xws,
+		COUNT(base.xws) AS games,
+		SUM(CASE WHEN winner_id = p1_player_id THEN 1 ELSE 0 END) AS wins,
+		SUM(CASE WHEN winner_id = p1_player_id THEN 1 ELSE 0 END) / COUNT(base.xws) AS winrate,
+		SUM(CASE WHEN p1_points < p2_points THEN 1 ELSE 0 END) AS games_bigger_bid,
+		SUM(CASE WHEN winner_id = p1_player_id AND p1_points < p2_points THEN 1 ELSE 0 END) AS win_bigger_bid,
+		SUM(CASE WHEN winner_id = p1_player_id AND p1_points < p2_points THEN 1 ELSE 0 END) / SUM(CASE WHEN p1_points < p2_points THEN 1 ELSE 0 END) AS winrate_bigger_bid,
+		SUM(CASE WHEN p1_points > p2_points THEN 1 ELSE 0 END) AS games_smaller_bid,
+		SUM(CASE WHEN winner_id = p1_player_id AND p1_points > p2_points THEN 1 ELSE 0 END) AS win_smaller_bid,
+		SUM(CASE WHEN winner_id = p1_player_id AND p1_points > p2_points THEN 1 ELSE 0 END) / SUM(CASE WHEN p1_points > p2_points THEN 1 ELSE 0 END) AS winrate_smaller_bid,
+		SUM(CASE WHEN base.match_type =2 THEN 1 ELSE 0 END) AS games_cut,
+		SUM(CASE WHEN winner_id = p1_player_id AND base.match_type =2 THEN 1 ELSE 0 END) AS wins_cut,
+		SUM(CASE WHEN winner_id = p1_player_id AND base.match_type =2 THEN 1 ELSE 0 END) / SUM(CASE WHEN base.match_type =2 THEN 1 ELSE 0 END) AS winrate_cut
+	FROM (
+	SELECT 
+		ref_upgrade.name AS NAME,
+		ref_upgrade.xws AS xws,
+		m.match_id AS match_id,
+		p1.player_id AS p1_player_id, 
+		p2.player_id AS p2_player_id, 
+		m.winner_id AS winner_id, 
+		m.type AS match_type,
+		p1.points AS p1_points, 
+		p2.points AS p2_points, 
+		t.date AS date
+	FROM matches_players player1
+	JOIN matches_players player2 ON player1.match_id = player2.match_id
+	JOIN matches m ON player1.match_id = m.match_id
+	JOIN players p1 ON player1.player_id = p1.player_id
+	JOIN players p2 ON player2.player_id = p2.player_id
+	JOIN pilots pilots1 ON pilots1.player_id = player1.player_id
+	JOIN ref_pilot ref_pilot1 ON ref_pilot1.ref_pilot_id = pilots1.ref_pilot_id
+	JOIN tournaments t ON p1.tournament_id = t.tournament_id
+	JOIN upgrades ON upgrades.pilot_id = pilots1.pilot_id
+	JOIN ref_upgrade ON upgrades.ref_upgrade_id = ref_upgrade.ref_upgrade_id
+	WHERE player1.player_id <> player2.player_id
+	AND ref_pilot1.xws = input_xws
+	AND t.date >= start_date
+	AND t.date <= end_date
+	AND t.format = input_format
+	) AS base
+	GROUP BY base.xws) 
+AS matchup_stats ON matchup_stats.upgrade_xws = ref_upgrade.xws
+LEFT JOIN (
+	SELECT
+	xws,
+	COUNT(xws) AS lists,
+	AVG(swiss_standing / players) AS avg_percentile,
+	SUM(CASE WHEN cut_standing > 0 THEN 1 ELSE 0 END) / COUNT(xws) AS cut_rate
+FROM (
+		SELECT
+			ref_upgrade.xws,
+			players.player_id,
+			players.swiss_standing,
+			tournaments.players,
+			players.cut_standing
+		FROM upgrades
+		LEFT JOIN ref_upgrade ON ref_upgrade.ref_upgrade_id = upgrades.ref_upgrade_id
+		LEFT JOIN pilots ON upgrades.pilot_id = pilots.pilot_id 
+		LEFT JOIN ref_pilot ON ref_pilot.ref_pilot_id = pilots.ref_pilot_id
+		LEFT JOIN players ON pilots.player_id = players.player_id
+		LEFT JOIN tournaments ON tournaments.tournament_id = players.tournament_id
+		WHERE tournaments.date >= start_date
+		AND tournaments.date <= end_date
+		AND tournaments.format = input_format
+		AND ref_pilot.xws = input_xws
+		GROUP BY ref_upgrade.xws, players.player_id
+	)
+	AS base
+	GROUP BY xws
+) AS list_stats ON list_stats.xws = ref_upgrade.xws
+WHERE list_stats.lists > 0
+ORDER BY lists desc
