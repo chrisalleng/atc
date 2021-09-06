@@ -1,4 +1,5 @@
 CREATE OR REPLACE VIEW v_all_pilots as SELECT 
+	distinct
 	pilots.ref_pilot_id, 
 	players.player_id, 
 	players.faction,
@@ -57,6 +58,7 @@ JOIN ref_faction ON ref_pilot.faction_id = ref_faction.faction_id;
 
 CREATE OR REPLACE VIEW v_all_upgrades AS
 SELECT
+	distinct
 	upgrades.ref_upgrade_id,
 	players.player_id,
 	players.points,
@@ -98,3 +100,9 @@ JOIN players ON players.player_id = pilots.player_id
 JOIN matches_players ON matches_players.player_id = pilots.player_id
 JOIN matches ON matches.match_id = matches_players.match_id
 JOIN tournaments ON players.tournament_id = tournaments.tournament_id;
+
+CREATE OR REPLACE VIEW v_get_upgrade_slot AS
+SELECT 
+	ref_upgrade_type.name AS name,
+	ref_upgrade.xws AS xws 
+FROM (ref_upgrade JOIN ref_upgrade_type ON (ref_upgrade.upgrade_type_id = ref_upgrade_type.upgrade_type_id));
