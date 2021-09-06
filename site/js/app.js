@@ -15,7 +15,7 @@ all_pilots_sql = "CALL GetAllPilots('2021-01-01','2100-01-01', 1)";
 all_upgrades_sql = "CALL GetAllUpgrades('2021-01-20','2100-01-01', 1)";
 all_factions_sql = "CALL GetAllFactions('2020-01-20','2100-01-01', 1)";
 pilot_matchups_sql = "CALL GetPilotMatchups(?, ?, ?)";
-pilot_stats_sql = "CALL GetPilotStats(?, ?, ?)";
+pilot_stats_sql = "CALL GetPilotStats(?, ?, ?, ?)";
 pilot_details_sql =
   "SELECT v_ref_pilot.pilot_name AS pilot_name,	v_ref_pilot.card_url AS pilot_card FROM v_ref_pilot WHERE v_ref_pilot.pilot_xws = ?";
 upgrade_details_sql =
@@ -181,7 +181,7 @@ app.get("/pilot_overview/:pilotxws", (req, res) => {
     }
     connection.query(
       pilot_stats_sql,
-      [xws, "2020-01-20", "2100-01-01"],
+      [xws, "2020-01-20", "2100-01-01", 34],
       function(err, result, fields) {
         connection.release();
         if (err) throw err;
