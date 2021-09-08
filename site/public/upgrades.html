@@ -81,9 +81,9 @@
             },
             { data: "cut_games" },
             {
-              data: "cut_rate",
+              data: "cut_winrate",
               render: function(data, type, row) {
-                return PercentageFormatter(data);
+                return CutWinrateFormatter(data, row);;
               }
             }
           ]
@@ -132,7 +132,7 @@
               <th>Type</th>
               <th>Lists</th>
               <th>Avg Bid</th>
-              <th>Avg Swiss Rank</th>
+              <th>Avg Percentile</th>
               <th>Cut Rate</th>
               <th>Matches</th>
               <th>Wins</th>

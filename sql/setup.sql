@@ -21,7 +21,6 @@ SELECT
 	pilots.pilot_id AS pilot_id,
 	pilots.ref_pilot_id AS ref_pilot_id,
 	pilots.player_id AS player_id,
-	pilots.points AS pilot_points,
 	players.faction AS faction,
 	players.points AS list_points,
 	players.swiss_standing AS swiss_standing,
@@ -77,10 +76,9 @@ JOIN tournaments on tournaments.tournament_id = players.tournament_id;
 
 CREATE OR REPLACE VIEW v_upgrades_matches AS
 SELECT
-	upgrades.upgrade_id AS upgrade_id,
+	distinct
 	upgrades.ref_upgrade_id AS ref_upgrade_id,
 	pilots.player_id AS player_id,
-	pilots.points AS pilot_points,
 	players.faction AS faction,
 	players.points AS list_points,
 	players.swiss_standing AS swiss_standing,

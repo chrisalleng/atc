@@ -16,15 +16,12 @@ all_upgrades_sql = "CALL GetAllUpgrades('2021-01-20','2100-01-01', 34)";
 all_factions_sql = "CALL GetAllFactions('2021-01-20','2100-01-01', 34)";
 pilot_matchups_sql = "CALL GetPilotMatchups(?, ?, ?, ?)";
 pilot_stats_sql = "CALL GetPilotStats(?, ?, ?, ?)";
-pilot_details_sql =
-  "SELECT v_ref_pilot.pilot_name AS pilot_name,	v_ref_pilot.card_url AS pilot_card FROM v_ref_pilot WHERE v_ref_pilot.pilot_xws = ?";
-upgrade_details_sql =
-  "SELECT ref_upgrade.name AS upgrade_name,	ref_upgrade.card_url AS upgrade_card FROM ref_upgrade WHERE ref_upgrade.xws = ?";
+pilot_details_sql = "SELECT v_ref_pilot.pilot_name AS pilot_name,	v_ref_pilot.card_url AS pilot_card FROM v_ref_pilot WHERE v_ref_pilot.pilot_xws = ?";
+upgrade_details_sql = "SELECT ref_upgrade.name AS upgrade_name,	ref_upgrade.card_url AS upgrade_card FROM ref_upgrade WHERE ref_upgrade.xws = ?";
 upgrades_by_pilot_sql = "CALL GetUpgradeStatsByPilot(?, ?, ?, ?)";
-pilots_by_upgrade_sql = "CALL GetPilotStatsByUpgrade(?, ?, ?)";
+pilots_by_upgrade_sql = "CALL GetPilotStatsByUpgrade(?, ?, ?, ?)";
 upgrades_by_type_sql = "CALL GetAllUpgradesOfType(?,?,?,?)";
-slot_by_upgrade_sql =
-  "SELECT name FROM v_get_upgrade_slot WHERE v_get_upgrade_slot.xws = ?";
+slot_by_upgrade_sql = "SELECT name FROM v_get_upgrade_slot WHERE v_get_upgrade_slot.xws = ?";
 
 var pool = mysql.createPool({
   host: "localhost",
@@ -259,7 +256,7 @@ app.get("/pilot_upgrades/:upgradexws", (req, res) => {
     }
     connection.query(
       pilots_by_upgrade_sql,
-      [xws, "2021-01-20", "2100-01-01"],
+      [xws, "2021-01-20", "2100-01-01", 34],
       function(err, result, fields) {
         connection.release();
         if (err) throw err;
