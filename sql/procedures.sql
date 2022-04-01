@@ -158,7 +158,7 @@ JOIN (
 ) AS game_stats
 ON main_stats.faction = game_stats.faction
 JOIN ref_faction ON ref_faction.faction_id = main_stats.faction
-WHERE main_stats.faction != 8
+WHERE main_stats.faction != 8;
 
 DROP PROCEDURE IF EXISTS atc.GetUpgradeStatsByPilot;
 CREATE PROCEDURE `GetUpgradeStatsByPilot`(
