@@ -2,6 +2,7 @@ import json
 import mysql.connector
 import requests
 import config
+import os
 
 
 def clean_pilot_xws(pilot_xws):
@@ -19,6 +20,8 @@ def clean_pilot_xws(pilot_xws):
         pilot_xws = "g4rgorvm"
     elif pilot_xws == "ahsokatanoawing":
         pilot_xws = "ahsokatano-rz1awing"
+    elif pilot_xws == "fennrau-rebelfangfighter":
+        pilot_xws = "fennrau-rebel-fang"
 
     return pilot_xws
 
@@ -42,8 +45,6 @@ def clean_upgrade_xws(upgrade_xws):
         upgrade_xws = "r2d2-resistance"
     elif upgrade_xws == "slavei-separatist":
         upgrade_xws = "slavei-swz82"
-    elif upgrade_xws == "gamutkey":
-        upgrade_xws = "gamutkey-crew"
     return upgrade_xws
 
 
@@ -144,15 +145,39 @@ def clear_tables(input_cursor):
                          "FOREIGN KEY(player_id) REFERENCES players(player_id),"
                          "FOREIGN KEY(match_id) REFERENCES matches(match_id))")
 
+
 def get_ref_data():
-    pilots_url = 'http://xhud.sirjorj.com/xwing.cgi/pilots2?format=json'
-    pilots_response = requests.get(pilots_url)
+    #pilots_url = 'http://xhud.sirjorj.com/xwing.cgi/pilots2?format=json'
+    #pilots_response = requests.get(pilots_url)
 
-    upgrades_url = 'http://xhud.sirjorj.com/xwing.cgi/upgrades2?format=json'
-    upgrades_response = requests.get(upgrades_url)
+    #upgrades_url = 'http://xhud.sirjorj.com/xwing.cgi/upgrades2?format=json'
+    #upgrades_response = requests.get(upgrades_url)
 
-    parsed_pilots = json.loads(pilots_response.content.decode('utf-8'))
-    parsed_upgrades = json.loads(upgrades_response.content.decode('utf-8'))
+    #parsed_pilots = json.loads(pilots_response.content.decode('utf-8'))
+    #parsed_upgrades = json.loads(upgrades_response.content.decode('utf-8'))
+
+    parsed_pilots = []
+    parsed_upgrades = []
+
+    for root, dirs, files in os.walk("lib/xwing-data2-master/data/pilots"):
+        for filename in files:
+            with open(os.path.join(root, filename), "r", encoding="utf8") as raw_file:
+                full_json = json.load(raw_file)
+                for single_pilot in full_json['pilots']:
+                    if single_pilot['standard'] is True:
+                        single_pilot['ship'] = full_json['name']
+                        single_pilot['faction'] = full_json['faction']
+                        parsed_pilots.append(single_pilot)
+            print(os.path.join(root, filename))
+
+    for root, dirs, files in os.walk("lib/xwing-data2-master/data/upgrades"):
+        for filename in files:
+            with open(os.path.join(root, filename), "r", encoding="utf8") as raw_file:
+                full_json = json.load(raw_file)
+                for single_upgrade in full_json:
+                    if single_upgrade['standard'] is True:
+                        parsed_upgrades.append(single_upgrade)
+            print(os.path.join(root, filename))
 
     ships = {}
     pilots = {}
@@ -187,9 +212,10 @@ def get_ref_data():
         for faction in factions_values:
             if faction[1] == pilot_faction:
                 pilot_faction = faction[0]
-
-        pilot_art = parsed_pilot['cardart']
-        pilot_card = parsed_pilot['cardimg']
+        if 'artwork' in parsed_pilot:
+            pilot_art = parsed_pilot['artwork']
+        if 'image' in parsed_pilot:
+            pilot_card = parsed_pilot['image']
 
         if ship not in ships:
             ships[ship] = (ship, len(ships) + 1)
@@ -200,24 +226,20 @@ def get_ref_data():
     ref_upgrade_types = []
 
     for parsed_upgrade in parsed_upgrades:
-        upgrade_type = parsed_upgrade['side'][0]['type']
+        upgrade_type = parsed_upgrade['sides'][0]['type']
         if upgrade_type not in ref_upgrade_types:
             ref_upgrade_types.append(upgrade_type)
         upgrade_type_id = ref_upgrade_types.index(upgrade_type) + 1
         upgrade_name = parsed_upgrade['name']
         upgrade_xws = parsed_upgrade['xws']
         upgrade_id = upgrade_id + 1
-        upgrade_art = parsed_upgrade['side'][0]['cardart']
-        upgrade_card = parsed_upgrade['side'][0]['cardimg']
+        if 'artwork' in parsed_upgrade['sides'][0]:
+            upgrade_art = parsed_upgrade['sides'][0]['artwork']
+        if 'image' in parsed_upgrade['sides'][0]:
+            upgrade_card = parsed_upgrade['sides'][0]['image']
         if 'cost' in parsed_upgrade:
-            if parsed_upgrade['cost']['variable'] == "None":
+            if parsed_upgrade['cost']['value'] != "?":
                 upgrade_cost = parsed_upgrade['cost']['value']
-            elif parsed_upgrade['cost']['variable'] == "initiative":
-                upgrade_cost = parsed_upgrade['cost']['6']
-            elif parsed_upgrade['cost']['variable'] == "Agility":
-                upgrade_cost = parsed_upgrade['cost']['agi3']
-            elif parsed_upgrade['cost']['variable'] == "BaseSize":
-                upgrade_cost = parsed_upgrade['cost']['large']
             else:
                 upgrade_cost = 200
         else:

@@ -12,7 +12,8 @@ def get_all_events():
 
     ids = []
     for event in parsed:
-        ids.append(event['id'])
+        if event['format_id'] == 36:
+            ids.append(event['id'])
     return ids
 
 
