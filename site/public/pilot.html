@@ -34,12 +34,12 @@
       var xws = getUrlParam("pilot", "ERROR");
       var card_url = "";
       var card_name = "";
-      var matchups_url = "http://localhost:3000/pilot/" + xws;
+      var matchups_url = "http://advancedtargeting.computer:3000/pilot/" + xws;
       var upgrades_url =
-        "http://localhost:3000/upgrades_pilot/" + xws;
+        "http://advancedtargeting.computer:3000/upgrades_pilot/" + xws;
       var overview_url =
-        "http://localhost:3000/pilot_overview/" + xws;
-      var url = "http://localhost:3000/pilot_details/" + xws;
+        "http://advancedtargeting.computer:3000/pilot_overview/" + xws;
+      var url = "http://advancedtargeting.computer:3000/pilot_details/" + xws;
       var test = loadJSON(url, function(response) {
         card_url = JSON.parse(response).pilot_card;
         card_name = JSON.parse(response).pilot_name;
