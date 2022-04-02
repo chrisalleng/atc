@@ -51,7 +51,7 @@ app.get("/all_pilots", (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) {
       console.log(err);
-      callback(true);
+      // callback(true);
       return;
     }
     connection.query(all_pilots_sql, function(err, result, fields) {
@@ -69,7 +69,7 @@ app.get("/all_upgrades", (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) {
       console.log(err);
-      callback(true);
+      // callback(true);
       return;
     }
     connection.query(all_upgrades_sql, function(err, result, fields) {
@@ -87,7 +87,7 @@ app.get("/all_factions", (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) {
       console.log(err);
-      callback(true);
+      // callback(true);
       return;
     }
     connection.query(all_factions_sql, function(err, result, fields) {
@@ -106,7 +106,7 @@ app.get("/upgrades/:upgradeslot", (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) {
       console.log(err);
-      callback(true);
+      // callback(true);
       return;
     }
     connection.query(
@@ -129,7 +129,7 @@ app.get("/upgrade_slot/:upgrade", (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) {
       console.log(err);
-      callback(true);
+      // callback(true);
       return;
     }
     connection.query(slot_by_upgrade_sql, [upgrade], function(
@@ -150,7 +150,7 @@ app.get("/pilot/:pilotxws", (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) {
       console.log(err);
-      callback(true);
+      // callback(true);
       return;
     }
     connection.query(
@@ -173,7 +173,7 @@ app.get("/pilot_overview/:pilotxws", (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) {
       console.log(err);
-      callback(true);
+      // callback(true);
       return;
     }
     connection.query(
@@ -193,7 +193,7 @@ app.get("/pilot_details/:pilotxws", (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) {
       console.log(err);
-      callback(true);
+      // callback(true);
       return;
     }
     const xws = req.sanitize(req.params.pilotxws);
@@ -210,7 +210,7 @@ app.get("/upgrade_details/:upgradexws", (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) {
       console.log(err);
-      callback(true);
+      // callback(true);
       return;
     }
     const xws = req.sanitize(req.params.upgradexws);
@@ -228,7 +228,7 @@ app.get("/upgrades_pilot/:pilotxws", (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) {
       console.log(err);
-      callback(true);
+      // callback(true);
       return;
     }
     connection.query(
@@ -251,7 +251,7 @@ app.get("/pilot_upgrades/:upgradexws", (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) {
       console.log(err);
-      callback(true);
+      // callback(true);
       return;
     }
     connection.query(
