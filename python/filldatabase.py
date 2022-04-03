@@ -103,7 +103,7 @@ def clear_tables(input_cursor):
                          "players INT, "
                          "date DATE,"
                          "cut_size INT,"
-                         "fill_rate DOUBLE," 
+                         "fill_rate DOUBLE,"
                          "format INT)")
 
     input_cursor.execute("CREATE TABLE players ("
@@ -147,15 +147,6 @@ def clear_tables(input_cursor):
 
 
 def get_ref_data():
-    #pilots_url = 'http://xhud.sirjorj.com/xwing.cgi/pilots2?format=json'
-    #pilots_response = requests.get(pilots_url)
-
-    #upgrades_url = 'http://xhud.sirjorj.com/xwing.cgi/upgrades2?format=json'
-    #upgrades_response = requests.get(upgrades_url)
-
-    #parsed_pilots = json.loads(pilots_response.content.decode('utf-8'))
-    #parsed_upgrades = json.loads(upgrades_response.content.decode('utf-8'))
-
     parsed_pilots = []
     parsed_upgrades = []
 
@@ -168,7 +159,6 @@ def get_ref_data():
                         single_pilot['ship'] = full_json['name']
                         single_pilot['faction'] = full_json['faction']
                         parsed_pilots.append(single_pilot)
-            print(os.path.join(root, filename))
 
     for root, dirs, files in os.walk("lib/xwing-data2-master/data/upgrades"):
         for filename in files:
@@ -177,7 +167,6 @@ def get_ref_data():
                 for single_upgrade in full_json:
                     if single_upgrade['standard'] is True:
                         parsed_upgrades.append(single_upgrade)
-            print(os.path.join(root, filename))
 
     ships = {}
     pilots = {}
@@ -192,7 +181,8 @@ def get_ref_data():
         (3, "Scum and Villainy", "scumandvillainy", "https://squadbuilder.fantasyflightgames.com/factions/Scum.png"),
         (4, "Resistance", "resistance", "https://squadbuilder.fantasyflightgames.com/factions/ResistanceIcon.png"),
         (5, "First Order", "firstorder", "https://squadbuilder.fantasyflightgames.com/factions/FirstOrderIcon.png"),
-        (6, "Galactic Republic", "galacticrepublic", "https://squadbuilder.fantasyflightgames.com/factions/RepublicIcon.png"),
+        (6, "Galactic Republic", "galacticrepublic",
+         "https://squadbuilder.fantasyflightgames.com/factions/RepublicIcon.png"),
         (7, "Separatist Alliance", "separatistalliance",
          "https://squadbuilder.fantasyflightgames.com/factions/SeparatistIcon.png"),
         (8, "Unknown", "unknown", "unknown")]
@@ -214,14 +204,18 @@ def get_ref_data():
                 pilot_faction = faction[0]
         if 'artwork' in parsed_pilot:
             pilot_art = parsed_pilot['artwork']
+        else:
+            pilot_art = ""
         if 'image' in parsed_pilot:
             pilot_card = parsed_pilot['image']
+        else:
+            pilot_card = ""
 
         if ship not in ships:
             ships[ship] = (ship, len(ships) + 1)
         pilots[pilot_xws] = (
-        pilot_name, pilot_xws, pilot_cost, pilot_initiative, ships[ship][1], pilot_id, pilot_faction, pilot_art,
-        pilot_card)
+            pilot_name, pilot_xws, pilot_cost, pilot_initiative, ships[ship][1], pilot_id, pilot_faction, pilot_art,
+            pilot_card)
 
     ref_upgrade_types = []
 
@@ -235,8 +229,12 @@ def get_ref_data():
         upgrade_id = upgrade_id + 1
         if 'artwork' in parsed_upgrade['sides'][0]:
             upgrade_art = parsed_upgrade['sides'][0]['artwork']
+        else:
+            upgrade_art = ""
         if 'image' in parsed_upgrade['sides'][0]:
             upgrade_card = parsed_upgrade['sides'][0]['image']
+        else:
+            upgrade_card = ""
         if 'cost' in parsed_upgrade:
             if parsed_upgrade['cost']['value'] != "?":
                 upgrade_cost = parsed_upgrade['cost']['value']
@@ -245,7 +243,8 @@ def get_ref_data():
         else:
             upgrade_cost = 0
 
-        upgrades[upgrade_xws] = (upgrade_name, upgrade_type_id, upgrade_xws, upgrade_cost, upgrade_id, upgrade_art, upgrade_card)
+        upgrades[upgrade_xws] = (
+        upgrade_name, upgrade_type_id, upgrade_xws, upgrade_cost, upgrade_id, upgrade_art, upgrade_card)
     all_ref_pilots = []
     for pilot in pilots.items():
         pilot = pilot[1]
