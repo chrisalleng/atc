@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+
 import mysql.connector
 import requests
 import config
@@ -22,6 +24,8 @@ def clean_pilot_xws(pilot_xws):
         pilot_xws = "ahsokatano-rz1awing"
     elif pilot_xws == "fennrau-rebelfangfighter":
         pilot_xws = "fennrau-rebel-fang"
+    elif pilot_xws == "bokatankryze-separatist":
+        pilot_xws = "bokatankryze-separatistalliance"
 
     return pilot_xws
 
@@ -45,6 +49,8 @@ def clean_upgrade_xws(upgrade_xws):
         upgrade_xws = "r2d2-resistance"
     elif upgrade_xws == "slavei-separatist":
         upgrade_xws = "slavei-swz82"
+    elif upgrade_xws == "fennrau-crew":
+        upgrade_xws = "fennrau"
     return upgrade_xws
 
 
@@ -135,6 +141,7 @@ def clear_tables(input_cursor):
                          "match_id INT AUTO_INCREMENT PRIMARY KEY,"
                          "winner_id INT,"
                          "type INT,"
+                         "scenario VARCHAR(255),"
                          "FOREIGN KEY(winner_id) REFERENCES players(player_id))")
 
     input_cursor.execute("CREATE TABLE matches_players ("
@@ -299,10 +306,15 @@ def update_tables(pilots, upgrades, factions, filename):
         all_tournaments = []
         pilot_id = 0
         for tournament in data:
+            filterdate = datetime.strptime('05-27-2022', '%m-%d-%Y')
+            tournamentdate = datetime.strptime(tournament['date'], '%Y-%m-%d')
+            if tournamentdate < filterdate:
+                continue
             tournament_player_count = len(tournament['participants'])
             tournament_id = tournament['id']
-            # Skip Worlds Dupes
-            if tournament_id == 1206 or tournament_id == 1193:
+            # Skip Worlds Dupes also random bad data
+            if tournament_id == 1206 or tournament_id == 1193 or tournament_id == 3012 or tournament_id == 3022\
+                    or tournament_id == 3028 or tournament_id == 3034 or tournament_id == 3039 or tournament_id == 3049 or tournament_id == 3089:
                 continue
             players_with_lists = 0
             for player in tournament['participants']:
@@ -387,7 +399,10 @@ def update_tables(pilots, upgrades, factions, filename):
                     match_id = match['id']
                     winner_id = match['winner_id']
                     match_type = rounds['roundtype_id']
-                    current_match = (match_id, winner_id, match_type)
+                    scenario = 'Unknown'
+                    if rounds['scenario']:
+                        scenario = rounds['scenario']
+                    current_match = (match_id, winner_id, match_type, scenario)
                     all_matches.append(current_match)
 
                     player1_id = match['player1_id']
@@ -408,7 +423,7 @@ def update_tables(pilots, upgrades, factions, filename):
               "VALUES (%s, %s, %s, %s, %s, %s) "
         cursor.executemany(sql, all_players)
 
-        sql = "INSERT INTO matches (match_id, winner_id, type) VALUES (%s, %s, %s) "
+        sql = "INSERT INTO matches (match_id, winner_id, type, scenario) VALUES (%s, %s, %s, %s) "
         cursor.executemany(sql, all_matches)
 
         player_sql = "INSERT INTO matches_players (match_id, player_id, player_points) VALUES (%s, %s, %s)"

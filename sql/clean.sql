@@ -84,6 +84,7 @@ CREATE TABLE matches (
 match_id INT AUTO_INCREMENT PRIMARY KEY,
 winner_id INT,
 type INT,
+scenario VARCHAR(255),
 FOREIGN KEY(winner_id) REFERENCES players(player_id));
 
 CREATE TABLE matches_players (

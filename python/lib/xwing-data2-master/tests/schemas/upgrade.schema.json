@@ -300,7 +300,9 @@
                 "gr75mediumtransport",
                 "croccruiser",
                 "cr90corelliancorvette",
-                "fireball"
+                "fireball",
+                "rogueclassstarfighter",
+                "syliureclasshyperspacering"
               ]
             }
           },
@@ -320,6 +322,7 @@
                 "Force Power",
                 "Gunner",
                 "Hardpoint",
+                "Hyperdrive",
                 "Illicit",
                 "Missile",
                 "Modification",
@@ -361,6 +364,7 @@
               "Force Power",
               "Gunner",
               "Hardpoint",
+              "Hyperdrive",
               "Illicit",
               "Missile",
               "Modification",
@@ -390,6 +394,7 @@
                 "Force Power",
                 "Gunner",
                 "Hardpoint",
+                "Hyperdrive",
                 "Illicit",
                 "Missile",
                 "Modification",

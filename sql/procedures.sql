@@ -286,26 +286,20 @@ SQL SECURITY DEFINER
 COMMENT ''
 SELECT 
 	pilot1_xws AS pilot1_xws,
-	pilot2_initiative AS pilot2_initiative,
+	scenario AS scenario,
 	COUNT(pilot1_xws) AS games,
 	SUM(CASE WHEN winner_id = p1_player_id THEN 1 ELSE 0 END) AS wins,
-	SUM(CASE WHEN winner_id = p1_player_id THEN 1 ELSE 0 END) / COUNT(pilot1_xws) AS winrate,
-	SUM(CASE WHEN p1_points < p2_points THEN 1 ELSE 0 END) AS games_bigger_bid,
-	SUM(CASE WHEN winner_id = p1_player_id AND p1_points < p2_points THEN 1 ELSE 0 END) AS win_bigger_bid,
-	SUM(CASE WHEN winner_id = p1_player_id AND p1_points < p2_points THEN 1 ELSE 0 END) / SUM(CASE WHEN p1_points < p2_points THEN 1 ELSE 0 END) AS winrate_bigger_bid,
-	SUM(CASE WHEN p1_points > p2_points THEN 1 ELSE 0 END) AS games_smaller_bid,
-	SUM(CASE WHEN winner_id = p1_player_id AND p1_points > p2_points THEN 1 ELSE 0 END) AS win_smaller_bid,
-	SUM(CASE WHEN winner_id = p1_player_id AND p1_points > p2_points THEN 1 ELSE 0 END) / SUM(CASE WHEN p1_points > p2_points THEN 1 ELSE 0 END) AS winrate_smaller_bid
+	SUM(CASE WHEN winner_id = p1_player_id THEN 1 ELSE 0 END) / COUNT(pilot1_xws) AS winrate
 FROM (
-SELECT 
-	DISTINCT ref_pilot1.xws AS pilot1_xws, 
-				ref_pilot2.initiative AS pilot2_initiative,
-				p1.player_id AS p1_player_id, 
-				p2.player_id AS p2_player_id, 
-				m.winner_id AS winner_id, 
+SELECT
+	DISTINCT ref_pilot1.xws AS pilot1_xws,
+				p1.player_id AS p1_player_id,
+				p2.player_id AS p2_player_id,
+				m.winner_id AS winner_id,
 				m.match_id AS match_id,
-				p1.points AS p1_points, 
-				p2.points AS p2_points, 
+				m.scenario AS scenario,
+				p1.points AS p1_points,
+				p2.points AS p2_points,
 				t.date AS date
 FROM matches_players player1
 JOIN matches_players player2 ON player1.match_id = player2.match_id
@@ -325,8 +319,8 @@ AND t.date >= start_date
 AND t.date <= end_date
 AND t.format = input_format
 ) AS base
-GROUP BY pilot1_xws, pilot2_initiative
-ORDER BY pilot2_initiative asc
+GROUP BY pilot1_xws, scenario
+ORDER BY scenario asc
 
 DROP PROCEDURE IF EXISTS atc.GetPilotMatchups;
 CREATE PROCEDURE `GetPilotMatchups`(
