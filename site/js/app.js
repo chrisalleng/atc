@@ -11,9 +11,9 @@ app.use(cors());
 app.use(favicon(__dirname + "./../public/favicon.ico"));
 app.use(expressSanitizer());
 
-all_pilots_sql = "CALL GetAllPilots('2021-01-20','2100-01-01', 36)";
-all_upgrades_sql = "CALL GetAllUpgrades('2021-01-20','2100-01-01', 36)";
-all_factions_sql = "CALL GetAllFactions('2021-01-20','2100-01-01', 36)";
+all_pilots_sql = "CALL GetAllPilots('2022-05-27','2100-01-01', 36)";
+all_upgrades_sql = "CALL GetAllUpgrades('2022-05-27','2100-01-01', 36)";
+all_factions_sql = "CALL GetAllFactions('2022-05-27','2100-01-01', 36)";
 pilot_matchups_sql = "CALL GetPilotMatchups(?, ?, ?, ?)";
 pilot_stats_sql = "CALL GetPilotStats(?, ?, ?, ?)";
 pilot_details_sql = "SELECT v_ref_pilot.pilot_name AS pilot_name,	v_ref_pilot.card_url AS pilot_card FROM v_ref_pilot WHERE v_ref_pilot.pilot_xws = ?";
@@ -111,7 +111,7 @@ app.get("/upgrades/:upgradeslot", (req, res) => {
     }
     connection.query(
       upgrades_by_type_sql,
-      [upgrade, "2021-01-20", "2100-01-01", 36],
+      [upgrade, "2022-05-27", "2100-01-01", 36],
       function(err, result, fields) {
         connection.release();
         if (err) throw err;
@@ -155,7 +155,7 @@ app.get("/pilot/:pilotxws", (req, res) => {
     }
     connection.query(
       pilot_matchups_sql,
-      [xws, "2021-01-20", "2100-01-01", 36],
+      [xws, "2022-05-27", "2100-01-01", 36],
       function(err, result, fields) {
         connection.release();
         if (err) throw err;
@@ -178,7 +178,7 @@ app.get("/pilot_overview/:pilotxws", (req, res) => {
     }
     connection.query(
       pilot_stats_sql,
-      [xws, "2021-01-20", "2100-01-01", 36],
+      [xws, "2022-05-27", "2100-01-01", 36],
       function(err, result, fields) {
         connection.release();
         if (err) throw err;
@@ -233,7 +233,7 @@ app.get("/upgrades_pilot/:pilotxws", (req, res) => {
     }
     connection.query(
       upgrades_by_pilot_sql,
-      [xws, "2021-01-20", "2100-01-01", 36],
+      [xws, "2022-05-27", "2100-01-01", 36],
       function(err, result, fields) {
         connection.release();
         if (err) throw err;
@@ -256,7 +256,7 @@ app.get("/pilot_upgrades/:upgradexws", (req, res) => {
     }
     connection.query(
       pilots_by_upgrade_sql,
-      [xws, "2021-01-20", "2100-01-01", 36],
+      [xws, "2022-05-27", "2100-01-01", 36],
       function(err, result, fields) {
         connection.release();
         if (err) throw err;
