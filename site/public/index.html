@@ -70,10 +70,7 @@
             },
             { data: "ship_name" },
             { data: "list_count" },
-            {
-              data: "avg_bid",
-              render: $.fn.dataTable.render.number(",", ".", 2, "")
-            },
+            { data: "cost"       },
             {
               data: "avg_percentile",
               render: function(data, type, row) {
@@ -144,7 +141,7 @@
             <th>Faction</th>
             <th>Ship</th>
             <th>Lists</th>
-            <th>Avg Bid</th>
+            <th>Cost</th>
             <th>Percentile</th>
             <th>Cut Rate</th>
             <th>Matches</th>

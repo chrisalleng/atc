@@ -285,41 +285,18 @@ CONTAINS SQL
 SQL SECURITY DEFINER
 COMMENT ''
 SELECT 
-	pilot1_xws AS pilot1_xws,
+	ref_pilot.ref_pilot_id AS pilot1_xws,
 	scenario AS scenario,
-	COUNT(pilot1_xws) AS games,
-	SUM(CASE WHEN winner_id = p1_player_id THEN 1 ELSE 0 END) AS wins,
-	SUM(CASE WHEN winner_id = p1_player_id THEN 1 ELSE 0 END) / COUNT(pilot1_xws) AS winrate
-FROM (
-SELECT
-	DISTINCT ref_pilot1.xws AS pilot1_xws,
-				p1.player_id AS p1_player_id,
-				p2.player_id AS p2_player_id,
-				m.winner_id AS winner_id,
-				m.match_id AS match_id,
-				m.scenario AS scenario,
-				p1.points AS p1_points,
-				p2.points AS p2_points,
-				t.date AS date
-FROM matches_players player1
-JOIN matches_players player2 ON player1.match_id = player2.match_id
-JOIN matches m ON player1.match_id = m.match_id
-JOIN players p1 ON player1.player_id = p1.player_id
-JOIN players p2 ON player2.player_id = p2.player_id
-JOIN pilots pilots1 ON pilots1.player_id = player1.player_id
-JOIN pilots pilots2 ON pilots2.player_id = player2.player_id
-JOIN ref_pilot ref_pilot1 ON ref_pilot1.ref_pilot_id = pilots1.ref_pilot_id
-JOIN ref_pilot ref_pilot2 ON ref_pilot2.ref_pilot_id = pilots2.ref_pilot_id
-JOIN ref_faction ON ref_pilot2.faction_id = ref_faction.faction_id
-JOIN ref_ship ON ref_pilot2.ship_id = ref_ship.ship_id
-JOIN tournaments t ON p1.tournament_id = t.tournament_id
-WHERE player1.player_id <> player2.player_id
-AND ref_pilot1.xws = xws
-AND t.date >= start_date
-AND t.date <= end_date
-AND t.format = input_format
-) AS base
-GROUP BY pilot1_xws, scenario
+	COUNT(distinct(v_pilots_matches.match_id)) AS games,
+	COUNT(distinct CASE WHEN v_pilots_matches.player_id = v_pilots_matches.winner_id THEN v_pilots_matches.match_id ELSE 0 END) - 1 AS wins,
+	(COUNT(distinct CASE WHEN v_pilots_matches.player_id = v_pilots_matches.winner_id THEN v_pilots_matches.match_id ELSE 0 END) - 1) / COUNT(distinct(v_pilots_matches.match_id)) AS winrate
+FROM v_pilots_matches
+JOIN ref_pilot ON ref_pilot.ref_pilot_id = v_pilots_matches.ref_pilot_id
+AND ref_pilot.xws = xws
+AND v_pilots_matches.date >= start_date
+AND v_pilots_matches.date <= end_date
+AND v_pilots_matches.format = format
+GROUP BY ref_pilot.ref_pilot_id, scenario
 ORDER BY scenario asc
 
 DROP PROCEDURE IF EXISTS atc.GetPilotMatchups;
