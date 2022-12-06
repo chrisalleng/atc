@@ -34,6 +34,7 @@ initiative INT,
 xws VARCHAR(255),
 art_url VARCHAR(255),
 card_url VARCHAR(255),
+standard BIT,
 FOREIGN KEY(faction_id) REFERENCES ref_faction(faction_id),
 FOREIGN KEY(ship_id) REFERENCES ref_ship(ship_id));
 

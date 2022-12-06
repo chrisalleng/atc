@@ -3,6 +3,8 @@ function PercentageFormatter(value, row, index) {
 }
 
 function WinrateFormatter(value, row, index) {
+  if (row.game_count === null)
+    row.game_count = 0
   if (row.game_count == 0) {
     return "0%"
   }
@@ -10,6 +12,8 @@ function WinrateFormatter(value, row, index) {
 }
 
 function CutWinrateFormatter(value, row, index) {
+  if (row.game_count === null)
+    row.game_count = 0
   if (row.cut_games == 0) {
     return "0%"
   }

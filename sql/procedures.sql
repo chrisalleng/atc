@@ -16,14 +16,15 @@ SELECT
 	v_ref_pilot.faction_xws AS faction_xws,
 	v_ref_pilot.ship_name AS ship_name,
 	main_stats.list_count AS list_count,
-	main_stats.avg_bid AS avg_bid,
+	v_ref_pilot.pilot_cost AS cost,
 	1 - main_stats.avg_percentile AS avg_percentile,
 	game_stats.game_count AS game_count,
 	game_stats.win_count AS win_count,
 	game_stats.cut_games AS cut_games,
 	game_stats.cut_wins AS cut_wins,
-    0.0 + main_stats.lists_make_cut / main_stats.lists_with_cut AS cut_rate
-FROM (
+   0.0 + main_stats.lists_make_cut / main_stats.lists_with_cut AS cut_rate
+FROM v_ref_pilot
+LEFT JOIN (
 	SELECT
 		v_all_pilots.ref_pilot_id AS ref_pilot_id,
 		(200 - AVG(v_all_pilots.points)) AS avg_bid,
@@ -34,12 +35,11 @@ FROM (
 	FROM v_all_pilots
 	WHERE v_all_pilots.date >= start_date
 		AND v_all_pilots.date <= end_date
-		AND v_all_pilots.players > 10
-		AND v_all_pilots.fill_rate > .65
-        AND v_all_pilots.format = input_format
+      AND v_all_pilots.format = input_format
 	GROUP BY v_all_pilots.ref_pilot_id
 ) AS main_stats
-JOIN (
+ON v_ref_pilot.ref_pilot_id = main_stats.ref_pilot_id
+LEFT JOIN (
 	SELECT
 		v_pilots_matches.ref_pilot_id AS ref_pilot_id,
 		COUNT(distinct(v_pilots_matches.match_id)) AS game_count,
@@ -49,11 +49,10 @@ JOIN (
 	FROM v_pilots_matches
 	WHERE v_pilots_matches.date >= start_date
 		AND v_pilots_matches.date <= end_date
-        AND v_pilots_matches.format = input_format
+      AND v_pilots_matches.format = input_format
 	GROUP BY v_pilots_matches.ref_pilot_id
 ) AS game_stats
 ON main_stats.ref_pilot_id = game_stats.ref_pilot_id
-JOIN v_ref_pilot ON v_ref_pilot.ref_pilot_id = main_stats.ref_pilot_id;
 
 DROP PROCEDURE IF EXISTS atc.GetAllUpgrades;
 CREATE PROCEDURE `GetAllUpgrades`(IN `start_date` DATE, IN `end_date` DATE, IN `input_format` INT)

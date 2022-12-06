@@ -51,6 +51,40 @@ def clean_upgrade_xws(upgrade_xws):
         upgrade_xws = "slavei-swz82"
     elif upgrade_xws == "fennrau-crew":
         upgrade_xws = "fennrau"
+    elif upgrade_xws == "r5k6":
+        upgrade_xws = "skip"
+    elif upgrade_xws == "attackspeedboy":
+        upgrade_xws = "skip"
+    elif upgrade_xws == "r2f2":
+        upgrade_xws = "skip"
+    elif upgrade_xws == "sensorjammerboy":
+        upgrade_xws = "skip"
+    elif upgrade_xws == "unstablesublightenginesboy":
+        upgrade_xws = "skip"
+    elif upgrade_xws == "l337sprogrammingboy":
+        upgrade_xws = "skip"
+    elif upgrade_xws == "targetingastromechboy":
+        upgrade_xws = "skip"
+    elif upgrade_xws == "fanaticboy":
+        upgrade_xws = "skip"
+    elif upgrade_xws == "r2a3":
+        upgrade_xws = "skip"
+    elif upgrade_xws == "preciseastromechboy":
+        upgrade_xws = "skip"
+    elif upgrade_xws == "vengefulboy":
+        upgrade_xws = "skip"
+    elif upgrade_xws == "roilingangersoc":
+        upgrade_xws = "roilinganger-siegeofcoruscant"
+    elif upgrade_xws == "contingencyprotocolsoc":
+        upgrade_xws = "contingencyprotocol-siegeofcoruscant"
+    elif upgrade_xws == "evasionsequence7soc":
+        upgrade_xws = "evasionsequence7-siegeofcoruscant"
+    elif upgrade_xws == "ancillaryionweaponssoc":
+        upgrade_xws = "ancillaryionweapons-siegeofcoruscant"
+    elif upgrade_xws == "strutlockoverridesoc":
+        upgrade_xws = "strutlockoverride-siegeofcoruscant"
+    elif upgrade_xws == "r4p17soc":
+        upgrade_xws = "r4p17-siegeofcoruscant"
     return upgrade_xws
 
 
@@ -91,6 +125,7 @@ def clear_tables(input_cursor):
                          "xws VARCHAR(255),"
                          "art_url VARCHAR(255),"
                          "card_url VARCHAR(255),"
+                         "standard BIT,"
                          "FOREIGN KEY(faction_id) REFERENCES ref_faction(faction_id),"
                          "FOREIGN KEY(ship_id) REFERENCES ref_ship(ship_id))")
 
@@ -157,7 +192,7 @@ def get_ref_data():
     parsed_pilots = []
     parsed_upgrades = []
 
-    for root, dirs, files in os.walk("lib/xwing-data2-master/data/pilots"):
+    for root, dirs, files in os.walk("lib/xwing-data2/data/pilots"):
         for filename in files:
             with open(os.path.join(root, filename), "r", encoding="utf8") as raw_file:
                 full_json = json.load(raw_file)
@@ -167,7 +202,7 @@ def get_ref_data():
                         single_pilot['faction'] = full_json['faction']
                         parsed_pilots.append(single_pilot)
 
-    for root, dirs, files in os.walk("lib/xwing-data2-master/data/upgrades"):
+    for root, dirs, files in os.walk("lib/xwing-data2/data/upgrades"):
         for filename in files:
             with open(os.path.join(root, filename), "r", encoding="utf8") as raw_file:
                 full_json = json.load(raw_file)
@@ -198,6 +233,7 @@ def get_ref_data():
         pilot_name = parsed_pilot['name']
         pilot_xws = parsed_pilot['xws']
         pilot_cost = parsed_pilot['cost']
+        pilot_standard = parsed_pilot['standard']
         pilot_id = pilot_id + 1
         if pilot_cost == "???":
             continue
@@ -222,7 +258,7 @@ def get_ref_data():
             ships[ship] = (ship, len(ships) + 1)
         pilots[pilot_xws] = (
             pilot_name, pilot_xws, pilot_cost, pilot_initiative, ships[ship][1], pilot_id, pilot_faction, pilot_art,
-            pilot_card)
+            pilot_card, pilot_standard)
 
     ref_upgrade_types = []
 
@@ -267,8 +303,8 @@ def get_ref_data():
 
     cursor.executemany(faction_sql, factions_values)
 
-    sql = "INSERT INTO ref_pilot (name, xws, cost, initiative, ship_id, ref_pilot_id, faction_id, art_url, card_url) " \
-          " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) "
+    sql = "INSERT INTO ref_pilot (name, xws, cost, initiative, ship_id, ref_pilot_id, faction_id, art_url, card_url, standard) " \
+          " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
     cursor.executemany(sql, all_ref_pilots)
 
     upgrade_types_with_id = []
@@ -316,6 +352,7 @@ def update_tables(pilots, upgrades, factions, filename):
             if tournament_id == 1206 or tournament_id == 1193 or tournament_id == 3012 or tournament_id == 3022\
                     or tournament_id == 3028 or tournament_id == 3034 or tournament_id == 3039 or tournament_id == 3049 or tournament_id == 3089:
                 continue
+            print(tournament_id)
             players_with_lists = 0
             for player in tournament['participants']:
                 if player['list_json'] is not None and player['list_json'].strip():
