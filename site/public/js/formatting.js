@@ -34,7 +34,7 @@ function NameLinkFormatter(value, row, index) {
     row.pilot_name + "</a>";
     subtitle = "<a " + row.pilot_subtitle + "/a>";
   return (
-    name_link + subtitle;
+    name_link + subtitle
   );
 }
 
