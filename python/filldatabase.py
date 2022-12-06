@@ -126,6 +126,7 @@ def clear_tables(input_cursor):
                          "art_url VARCHAR(255),"
                          "card_url VARCHAR(255),"
                          "standard BIT,"
+                         "subtitle VARCHAR(255),"
                          "FOREIGN KEY(faction_id) REFERENCES ref_faction(faction_id),"
                          "FOREIGN KEY(ship_id) REFERENCES ref_ship(ship_id))")
 
@@ -254,11 +255,16 @@ def get_ref_data():
         else:
             pilot_card = ""
 
+        if 'caption' in parsed_pilot:
+            pilot_subtitle = parsed_pilot['caption']
+        else:
+            pilot_subtitle = ""
+
         if ship not in ships:
             ships[ship] = (ship, len(ships) + 1)
         pilots[pilot_xws] = (
             pilot_name, pilot_xws, pilot_cost, pilot_initiative, ships[ship][1], pilot_id, pilot_faction, pilot_art,
-            pilot_card, pilot_standard)
+            pilot_card, pilot_standard, pilot_subtitle)
 
     ref_upgrade_types = []
 
@@ -303,8 +309,8 @@ def get_ref_data():
 
     cursor.executemany(faction_sql, factions_values)
 
-    sql = "INSERT INTO ref_pilot (name, xws, cost, initiative, ship_id, ref_pilot_id, faction_id, art_url, card_url, standard) " \
-          " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
+    sql = "INSERT INTO ref_pilot (name, xws, cost, initiative, ship_id, ref_pilot_id, faction_id, art_url, card_url, standard, subtitle) " \
+          " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
     cursor.executemany(sql, all_ref_pilots)
 
     upgrade_types_with_id = []

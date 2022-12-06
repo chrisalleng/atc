@@ -7,6 +7,7 @@ SQL SECURITY DEFINER
 COMMENT ''
 SELECT
 	v_ref_pilot.pilot_name AS pilot_name,
+	v_ref_pilot.subtitle AS subtitle,
 	v_ref_pilot.pilot_xws AS pilot_xws,
 	v_ref_pilot.art_url AS art_url,
 	v_ref_pilot.card_url AS card_url,

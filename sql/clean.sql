@@ -28,13 +28,14 @@ CREATE TABLE ref_pilot (
 ref_pilot_id INT AUTO_INCREMENT PRIMARY KEY,
 ship_id INT,
 faction_id INT,
-name VARCHAR(255), 
+name VARCHAR(255),
 cost INT,
 initiative INT,
 xws VARCHAR(255),
 art_url VARCHAR(255),
 card_url VARCHAR(255),
 standard BIT,
+subtitle VARCHAR(255),
 FOREIGN KEY(faction_id) REFERENCES ref_faction(faction_id),
 FOREIGN KEY(ship_id) REFERENCES ref_ship(ship_id));
 
