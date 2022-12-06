@@ -96,7 +96,9 @@
               render: function(data, type, row) {
                 return CutWinrateFormatter(data, row);
               }
-            }
+            },
+            { data: "subtitle",
+             className: "hiddenColumn"},
           ]
         });
       });

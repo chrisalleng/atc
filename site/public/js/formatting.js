@@ -12,8 +12,8 @@ function WinrateFormatter(value, row, index) {
 }
 
 function CutWinrateFormatter(value, row, index) {
-  if (row.game_count === null)
-    row.game_count = 0
+  if (row.cut_games === null)
+    row.cut_games = 0
   if (row.cut_games == 0) {
     return "0%"
   }
@@ -31,8 +31,10 @@ function DecimalFormatter(value, row, index) {
 function NameLinkFormatter(value, row, index) {
     name_link = "<a class='text-white' href='" +
     "./pilot.html?pilot=" + row.pilot_xws + "'>" +
-    row.pilot_name + "</a>";
-    subtitle = "<a " + row.pilot_subtitle + "/a>";
+    "<u>" + row.pilot_name + "</u>"
+//    + "<br>" + row.subtitle
+    + "</a>";
+    subtitle = "<p><i> " + row.subtitle + " </i></p>";
   return (
     name_link + subtitle
   );

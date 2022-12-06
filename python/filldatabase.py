@@ -258,7 +258,7 @@ def get_ref_data():
         if 'caption' in parsed_pilot:
             pilot_subtitle = parsed_pilot['caption']
         else:
-            pilot_subtitle = ""
+            pilot_subtitle = "Generic"
 
         if ship not in ships:
             ships[ship] = (ship, len(ships) + 1)
