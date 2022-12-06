@@ -29,13 +29,12 @@ function DecimalFormatter(value, row, index) {
 }
 
 function NameLinkFormatter(value, row, index) {
+    name_link = "<a class='text-white' href='" +
+    "./pilot.html?pilot=" + row.pilot_xws + "'>" +
+    row.pilot_name + "</a>";
+    subtitle = "<a " + row.pilot_subtitle + "/a>";
   return (
-    "<a class='text-white' href='" +
-    "./pilot.html?pilot=" +
-    row.pilot_xws +
-    "'>" +
-    row.pilot_name +
-    "</a>"
+    name_link + subtitle;
   );
 }
 
