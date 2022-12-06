@@ -45,6 +45,7 @@ CREATE OR REPLACE VIEW v_ref_pilot AS
 SELECT
 	ref_pilot.ref_pilot_id AS ref_pilot_id,
 	ref_pilot.name AS pilot_name,
+	ref_pilot.subtitle as subtitle,
 	ref_pilot.xws AS pilot_xws,
 	ref_pilot.cost as pilot_cost,
 	ref_pilot.art_url AS art_url,
