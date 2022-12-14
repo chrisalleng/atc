@@ -12,7 +12,7 @@
     "cors": "^2.8.5",
     "datatables.net": "^1.11.3",
     "datatables.net-dt": "^1.10.20",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-sanitizer": "^1.0.5",
     "mysql2": "^2.2.5",
     "serve-favicon": "^2.5.0"
