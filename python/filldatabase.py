@@ -26,6 +26,16 @@ def clean_pilot_xws(pilot_xws):
         pilot_xws = "fennrau-rebel-fang"
     elif pilot_xws == "bokatankryze-separatist":
         pilot_xws = "bokatankryze-separatistalliance"
+    elif pilot_xws == "dt798-tiefofighter":
+        pilot_xws = "dt798"
+    elif pilot_xws == "maulermither-battleofyavin":
+        pilot_xws = "maulermithel-battleofyavin"
+    elif pilot_xws == "kickback-sigeofcoruscant":
+        pilot_xws = "kickback-siegeofcoruscant"
+    elif pilot_xws == "axe-sigeofcoruscant":
+        pilot_xws = "axe-siegeofcoruscant"
+    elif pilot_xws == "hondoohnaka-firesprayclasspatrolcraft":
+        pilot_xws = "hondoohnaka"
 
     return pilot_xws
 
@@ -85,7 +95,31 @@ def clean_upgrade_xws(upgrade_xws):
         upgrade_xws = "strutlockoverride-siegeofcoruscant"
     elif upgrade_xws == "r4p17soc":
         upgrade_xws = "r4p17-siegeofcoruscant"
+    elif upgrade_xws == "preciseastromech":
+        upgrade_xws = "preciseastromech-battleofyavin"
+    elif upgrade_xws == "targetingastromech":
+        upgrade_xws = "targetingastromech-battleofyavin"
+    elif upgrade_xws == "unstablesublightengines":
+        upgrade_xws = "unstablesublightengines-battleofyavin"
+    elif upgrade_xws == "l337sprogramming":
+        upgrade_xws = "l337sprogramming-battleofyavin"
+    elif upgrade_xws == "attackspeed":
+        upgrade_xws = "attackspeed-battleofyavin"
+    elif upgrade_xws == "vectoredcannons":
+        upgrade_xws = "vectoredcannonsrz1"
+    elif upgrade_xws == "vengeful":
+        upgrade_xws = "vengeful-battleofyavin"
+    elif upgrade_xws == "instictiveaim":
+        upgrade_xws = "instinctiveaim"
+
     return upgrade_xws
+
+
+def clean_scenario_xws(scenario_xws):
+    if scenario_xws == "Assault the Satellite Array":
+        scenario_xws = "Assault at the Satellite Array"
+
+    return scenario_xws
 
 
 def clear_tables(input_cursor):
@@ -445,6 +479,7 @@ def update_tables(pilots, upgrades, factions, filename):
                     scenario = 'Unknown'
                     if rounds['scenario']:
                         scenario = rounds['scenario']
+                        scenario = clean_scenario_xws(scenario)
                     current_match = (match_id, winner_id, match_type, scenario)
                     all_matches.append(current_match)
 
