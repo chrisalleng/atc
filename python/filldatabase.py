@@ -253,15 +253,15 @@ def get_ref_data():
 
     faction_sql = "INSERT INTO ref_faction (faction_id, name, xws, icon_url) VALUES (%s, %s, %s, %s)"
     factions_values = [
-        (1, "Rebel Alliance", "rebelalliance", "https://squadbuilder.fantasyflightgames.com/factions/Rebel.png"),
-        (2, "Galactic Empire", "galacticempire", "https://squadbuilder.fantasyflightgames.com/factions/Imperial.png"),
-        (3, "Scum and Villainy", "scumandvillainy", "https://squadbuilder.fantasyflightgames.com/factions/Scum.png"),
-        (4, "Resistance", "resistance", "https://squadbuilder.fantasyflightgames.com/factions/ResistanceIcon.png"),
-        (5, "First Order", "firstorder", "https://squadbuilder.fantasyflightgames.com/factions/FirstOrderIcon.png"),
+        (1, "Rebel Alliance", "rebelalliance", "https://infinitearenas.com/xw2/images/artwork/faction-icons/Rebel.png"),
+        (2, "Galactic Empire", "galacticempire", "https://infinitearenas.com/xw2/images/artwork/faction-icons/Imperial.png"),
+        (3, "Scum and Villainy", "scumandvillainy", "https://infinitearenas.com/xw2/images/artwork/faction-icons/Scum.png"),
+        (4, "Resistance", "resistance", "https://infinitearenas.com/xw2/images/artwork/faction-icons/ResistanceIcon.png"),
+        (5, "First Order", "firstorder", "https://infinitearenas.com/xw2/images/artwork/faction-icons/FirstOrderIcon.png"),
         (6, "Galactic Republic", "galacticrepublic",
-         "https://squadbuilder.fantasyflightgames.com/factions/RepublicIcon.png"),
+         "https://infinitearenas.com/xw2/images/artwork/faction-icons/RepublicIcon.png"),
         (7, "Separatist Alliance", "separatistalliance",
-         "https://squadbuilder.fantasyflightgames.com/factions/SeparatistIcon.png"),
+         "https://infinitearenas.com/xw2/images/artwork/faction-icons/SeparatistIcon.png"),
         (8, "Unknown", "unknown", "unknown")]
 
     for parsed_pilot in parsed_pilots:
